@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Audiomob Demo Kotlin</string>
+    <string name="play_ad_to_earn_reward">Play Audio Ad</string>
+</resources>

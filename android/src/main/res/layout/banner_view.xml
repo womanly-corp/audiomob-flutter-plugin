@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/banner_image"
+        android:layout_width="210dp"
+        android:layout_height="175dp"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true"
+        android:visibility="invisible"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        app:shapeAppearanceOverlay="@style/AudiomobCircular"
+        app:strokeColor="@color/audiomob_banner_border_color"
+        app:strokeWidth="1dp" />
+
+    <TextView
+        android:id="@+id/audiomob_timer_text"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="24dp"
+        android:background="@drawable/progress_counter_background"
+        android:gravity="center"
+        android:text="30"
+        android:textColor="@color/audiomob_white"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/audiomob_banner_medium_rectangle"
+        app:layout_constraintTop_toTopOf="@+id/audiomob_banner_medium_rectangle" />
+
+    <ProgressBar
+        android:id="@+id/audiomob_timer_fill"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="24dp"
+        android:background="@drawable/audiomob_circular_shape"
+        android:progress="0"
+        android:progressDrawable="@drawable/audiomob_circular_progress_bar"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/audiomob_banner_medium_rectangle"
+        app:layout_constraintTop_toTopOf="@+id/audiomob_banner_medium_rectangle" />
+
+    <TextView
+        android:id="@+id/audiomob_skip_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:background="@drawable/audiomob_ic_skip"
+        android:padding="3dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/audiomob_banner_medium_rectangle"
+        app:layout_constraintTop_toTopOf="@+id/audiomob_banner_medium_rectangle" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
