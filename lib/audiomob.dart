@@ -37,7 +37,7 @@ class Audiomob {
     });
   }
 
-  Future<void> requestAndPlay(BannerType bannerType) {
-    return AudiomobPlatform.instance.requestAndPlay(bannerType);
+  Future<void> requestAndPlay(BannerType bannerType, bool skipable) {
+    return AudiomobPlatform.instance.requestAndPlay(bannerType, skipable);
   }
 }

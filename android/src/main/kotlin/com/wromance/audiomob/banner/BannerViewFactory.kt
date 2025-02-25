@@ -1,5 +1,6 @@
 import android.content.Context
 import android.view.View
+import android.view.ViewGroup
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.StandardMessageCodec
 import io.flutter.plugin.platform.PlatformView
@@ -9,14 +10,16 @@ class BannerViewFactory(private val messenger: BinaryMessenger) :
     PlatformViewFactory(StandardMessageCodec.INSTANCE) {
 
     override fun create(context: Context, id: Int, args: Any?): PlatformView {
-        val params = args as? Map<String, Any>
-        val type = BannerType.fromValue(params?.get("bannerType") as? String ?: "rectangleBanner")
 
         return object : PlatformView {
-            override fun getView(): View = BannerManager.getBanner() ?: BannerView(context, null)
+            override fun getView(): View {
+                val banner = BannerManager.getRoot()
+                if (banner?.parent != null) {
+                    (banner.parent as? ViewGroup)?.removeView(banner)
+                }
+                return banner ?: BannerView(context, null)
+            }
             override fun dispose() {}
-        }.also {
-            BannerManager.updateBanner(type)
         }
     }
 }

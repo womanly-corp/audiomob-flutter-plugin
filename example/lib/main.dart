@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'dart:async';
+import 'package:audiomob/banner_type.dart';
+import 'package:audiomob/banner_widget.dart';
 
-import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
 import 'package:audiomob/audiomob.dart';
 
 void main() {
@@ -16,36 +16,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
+  BannerType _bannerType = BannerType.rectangleBanner;
   final _audiomobPlugin = Audiomob();
-
-  @override
-  void initState() {
-    super.initState();
-    initPlatformState();
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    // We also handle the message potentially returning null.
-    try {
-      platformVersion =
-          await _audiomobPlugin.getPlatformVersion() ?? 'Unknown platform version';
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +27,75 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+          child: Column(
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  _audiomobPlugin.requestAndPlay(BannerType.noBanner, false);
+                  setState(() {
+                    _bannerType = BannerType.noBanner;
+                  });
+                },
+                child: const Text("not skipable | no banner"),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  _audiomobPlugin.requestAndPlay(
+                      BannerType.rectangleBanner, false);
+                  setState(() {
+                    _bannerType = BannerType.rectangleBanner;
+                  });
+                },
+                child: const Text("not skipable | rectangle"),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  _audiomobPlugin.requestAndPlay(
+                      BannerType.leaderboardBanner, false);
+                  setState(() {
+                    _bannerType = BannerType.leaderboardBanner;
+                  });
+                },
+                child: const Text("not skipable | leaderboard"),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  _audiomobPlugin.requestAndPlay(BannerType.noBanner, true);
+                  setState(() {
+                    _bannerType = BannerType.noBanner;
+                  });
+                },
+                child: const Text("skipable | no banner"),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  _audiomobPlugin.requestAndPlay(
+                      BannerType.rectangleBanner, true);
+                  setState(() {
+                    _bannerType = BannerType.rectangleBanner;
+                  });
+                },
+                child: const Text("skipable | rectangle"),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  _audiomobPlugin.requestAndPlay(
+                      BannerType.leaderboardBanner, true);
+                  setState(() {
+                    _bannerType = BannerType.leaderboardBanner;
+                  });
+                },
+                child: const Text("skipable | leaderboard"),
+              ),
+              const SizedBox(height: 20),
+              BannerWidget(bannerType: _bannerType),
+            ],
+          ),
         ),
       ),
     );
