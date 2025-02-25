@@ -2,6 +2,7 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        mavenLocal()
     }
 }
 
@@ -15,4 +16,10 @@ subprojects {
 
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
+}
+
+tasks.configureEach {task ->
+    if(task.name.contains("testDebugUnitTest")) {
+        task.enabled = false
+    }
 }

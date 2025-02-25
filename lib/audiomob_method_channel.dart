@@ -13,9 +13,14 @@ class MethodChannelAudiomob extends AudiomobPlatform {
   final eventChannel = const EventChannel("audiomob/events");
 
   @override
-  Future<void> requestAndPlay(BannerType bannerType) async {
+  Future<void> requestAndPlay(BannerType bannerType, bool skipable) async {
     await methodChannel.invokeMethod<String>('requestAndPlay', {
-      'bannerType': bannerType.name,
+      'bannerType': switch (bannerType) {
+        BannerType.rectangleBanner => 'MEDIUM_RECTANGLE',
+        BannerType.leaderboardBanner => 'MOBILE_LEADERBOARD',
+        BannerType.noBanner => 'NO_BANNER',
+      },
+      'skipable': skipable,
     });
   }
 }

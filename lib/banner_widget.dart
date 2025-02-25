@@ -9,13 +9,11 @@ class BannerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: bannerType == BannerType.rectangleBanner ? 210 : 320,
-      height: bannerType == BannerType.rectangleBanner ? 175 : 50,
-      child: AndroidView(
+    return Expanded(
+      child: const AndroidView(
         viewType: "audiomob_banner_view",
-        creationParams: {"bannerType": bannerType.name},
-        creationParamsCodec: const StandardMessageCodec(),
+        creationParams: {},
+        creationParamsCodec: StandardMessageCodec(),
       ),
     );
   }

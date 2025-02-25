@@ -1,9 +1,6 @@
 package com.wromance.audiomob
 
-import AdNoticeManager
-import AdNoticeViewFactory
 import BannerManager
-import BannerType
 import BannerViewFactory
 import android.app.Activity
 import android.util.Log
@@ -18,6 +15,8 @@ import com.audiomob.sdk.data.models.BannerConfiguration
 import com.audiomob.sdk.data.models.CountdownConfiguration
 import com.audiomob.sdk.data.models.RewardedAudioOnlyAdConfiguration
 import com.audiomob.sdk.data.models.RewardedBannerAdConfiguration
+import com.audiomob.sdk.data.models.SkippableAudioOnlyAdConfiguration
+import com.audiomob.sdk.data.models.SkippableBannerAdConfiguration
 import com.audiomob.sdk.data.models.UnmutePromptConfiguration
 import com.audiomob.sdk.data.responses.AdAvailability
 import com.audiomob.sdk.data.responses.AudioAd
@@ -36,7 +35,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 
-class AudiomobFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
+class AudiomobPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     DefaultLifecycleObserver, IAudiomobCallback {
     private lateinit var audiomobPlugin: AudiomobPlugin
     private lateinit var channel: MethodChannel
@@ -76,11 +75,6 @@ class AudiomobFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
             BannerViewFactory(flutterPluginBinding.binaryMessenger)
         )
 
-        flutterPluginBinding.platformViewRegistry.registerViewFactory(
-            "audiomob_ad_notice_view",
-            AdNoticeViewFactory(flutterPluginBinding.binaryMessenger)
-        )
-
         audiomobPlugin = AudiomobPlugin(flutterPluginBinding.applicationContext)
         // TODO HARDCODE
         // TODO check bundle id
@@ -104,38 +98,65 @@ class AudiomobFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
 
     override fun onMethodCall(call: MethodCall, result: Result) {
         if (call.method == "requestAndPlay") {
-            val bannerType = BannerType.fromValue(call.argument<String>("bannerType"))
+            val bannerType = bannerSizeFromValue(call.argument<String>("bannerType"))
+            val skipable = call.argument<Boolean>("skipable") ?: false
+
             val unmutePrompt = UnmutePromptConfiguration(
-                activity!!.findViewById(R.id.audiomob_unmute_prompt),
-                activity!!.findViewById(R.id.audiomob_unmute_prompt_text),
-                activity!!.findViewById(R.id.audiomob_unmute_prompt_raise_volume_button),
-                activity!!.findViewById(R.id.audiomob_unmute_prompt_stop_ad_button)
+                unmutePromptView!!,
+                unmutePromptView!!.findViewById(R.id.audiomob_unmute_prompt_text),
+                unmutePromptView!!.findViewById(R.id.audiomob_unmute_prompt_raise_volume_button),
+                unmutePromptView!!.findViewById(R.id.audiomob_unmute_prompt_stop_ad_button)
             )
+
+            val adView = BannerManager.getRoot()!!
+            adView.configureBanner(bannerType)
+
+            printViewHierarchy(adView);
+
             val countdownConfiguration = CountdownConfiguration(
-                activity!!.findViewById(R.id.audiomob_timer_text),
-                activity!!.findViewById(R.id.audiomob_timer_fill)
+                adView.findViewById(R.id.audiomob_timer_text),
+                adView.findViewById(R.id.audiomob_timer_fill)
             )
-            val adConfiguration = if (bannerType == BannerType.NOBANNER) {
-                RewardedAudioOnlyAdConfiguration(
+
+            val bannerConfiguration = BannerConfiguration(
+                bannerType,
+                BannerManager.getBanner()!!
+            )
+            val adConfiguration = if (bannerType == BannerSize.NO_BANNER) {
+                if (skipable)
+                    SkippableAudioOnlyAdConfiguration(
+                        countdownConfiguration,
+                        BannerManager.getSkipButton()!!,
+                        BannerManager.getAdNoticeText()!!
+                    )
+                else RewardedAudioOnlyAdConfiguration(
                     unmutePrompt,
                     countdownConfiguration,
-                    AdNoticeManager.getAdNotice()!!,
+                    BannerManager.getAdNoticeText()!!,
                 )
             } else {
-                RewardedBannerAdConfiguration(
-                    BannerConfiguration(
-                        if (bannerType == BannerType.RECTANGLE) BannerSize.MEDIUM_RECTANGLE else BannerSize.MOBILE_LEADERBOARD,
-                        BannerManager.getBanner()!!
-                    ),
-                    unmutePrompt,
-                    countdownConfiguration,
-                )
+                if (skipable)
+                    SkippableBannerAdConfiguration(
+                        bannerConfiguration,
+                        countdownConfiguration,
+                        BannerManager.getSkipButton()!!
+                    )
+                else
+                    RewardedBannerAdConfiguration(
+                        bannerConfiguration,
+                        unmutePrompt,
+                        countdownConfiguration
+                    )
             }
             audiomobPlugin.requestAndPlayAd(adConfiguration)
-            result.success(Unit)
+            result.success(null)
         } else {
             result.notImplemented()
         }
+    }
+
+    private fun bannerSizeFromValue(size: String?): BannerSize {
+        return BannerSize.values().firstOrNull { it.name == size } ?: BannerSize.MEDIUM_RECTANGLE
     }
 
     //// ActivityAware implementation
@@ -209,12 +230,14 @@ class AudiomobFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     }
 
     override fun onAdPlaybackStarted(audioAd: AudioAd) {
+        printViewHierarchy(BannerManager.getRoot()!!)
         eventSink?.success(mapOf("type" to "onAdPlaybackStarted", "audioAd" to audioAd.toMap()))
         Log.d("Audiomob Demo Project", "onAdPlaybackStarted: $audioAd")
         // Playback of the ad has begun, use the callback to mute your app's sound.
     }
 
     override fun onAdPlaybackCompleted(adPlaybackResult: AdPlaybackResult) {
+        printViewHierarchy(BannerManager.getRoot()!!)
         eventSink?.success(
             mapOf(
                 "type" to "onAdPlaybackCompleted",
@@ -238,5 +261,26 @@ class AudiomobFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
         eventSink?.success(mapOf("type" to "onAdPlaybackResumed"))
         Log.d("Audiomob Demo Project", "onAdPlaybackResumed")
 
+    }
+}
+
+
+fun printViewHierarchy(view: View, indent: String = "") {
+    val visibilityStatus = when (view.visibility) {
+        View.VISIBLE -> "VISIBLE"
+        View.INVISIBLE -> "INVISIBLE"
+        View.GONE -> "GONE"
+        else -> "UNKNOWN"
+    }
+
+    val width = view.width
+    val height = view.height
+
+    println("${indent}${view::class.java.simpleName}: visibility=$visibilityStatus, size=${width}x${height}")
+
+    if (view is ViewGroup) {
+        for (i in 0 until view.childCount) {
+            printViewHierarchy(view.getChildAt(i), "$indent  ")
+        }
     }
 }
