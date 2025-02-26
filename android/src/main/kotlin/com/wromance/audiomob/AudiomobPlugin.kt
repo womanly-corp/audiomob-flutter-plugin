@@ -24,7 +24,6 @@ import com.audiomob.sdk.enums.AdPlaybackResult
 import com.audiomob.sdk.enums.AdRequestResult
 import com.audiomob.sdk.enums.BannerSize
 import com.audiomob.sdk.enums.PauseAdEnum
-import com.audiomob.sdk.interfaces.managers.IAudiomobCallback
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -36,7 +35,7 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 
 class AudiomobPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
-    DefaultLifecycleObserver, IAudiomobCallback {
+    DefaultLifecycleObserver {
     private lateinit var audiomobPlugin: AudiomobPlugin
     private lateinit var channel: MethodChannel
     private lateinit var eventChannel: EventChannel
@@ -118,10 +117,6 @@ class AudiomobPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
                 adView.findViewById(R.id.audiomob_timer_fill)
             )
 
-            val bannerConfiguration = BannerConfiguration(
-                bannerType,
-                BannerManager.getBanner()!!
-            )
             val adConfiguration = if (bannerType == BannerSize.NO_BANNER) {
                 if (skipable)
                     SkippableAudioOnlyAdConfiguration(
@@ -135,6 +130,10 @@ class AudiomobPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
                     BannerManager.getAdNoticeText()!!,
                 )
             } else {
+                val bannerConfiguration = BannerConfiguration(
+                    bannerType,
+                    BannerManager.getBanner()!!
+                )
                 if (skipable)
                     SkippableBannerAdConfiguration(
                         bannerConfiguration,
@@ -205,63 +204,63 @@ class AudiomobPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
 
     //// IAudiomobCallback
 
-    override fun onAdAvailabilityRetrieved(result: AdAvailability) {
-        eventSink?.success(mapOf("type" to "onAdAvailabilityRetrieved", "result" to result.toMap()))
-        Log.d("Audiomob Demo Project", "Ads are available: " + result.toMap())
-    }
-
-    override fun onAdRequestStarted() {
-        eventSink?.success(mapOf("type" to "onAdRequestStarted"))
-        Log.d("Audiomob Demo Project", "onAdRequestStarted")
-    }
-
-    override fun onAdRequestCompleted(adRequestResult: AdRequestResult, audioAd: AudioAd?) {
-        eventSink?.success(
-            mapOf(
-                "type" to "onAdRequestCompleted",
-                "adRequestResult" to adRequestResult.name,
-                "audioAd" to audioAd?.toMap()
-            )
-        )
-        Log.d("Audiomob Demo Project", "onAdRequestCompleted: $adRequestResult, $audioAd")
-        if (adRequestResult != AdRequestResult.FINISHED) {
-            // The ad request was not successful.
-        }
-    }
-
-    override fun onAdPlaybackStarted(audioAd: AudioAd) {
-        printViewHierarchy(BannerManager.getRoot()!!)
-        eventSink?.success(mapOf("type" to "onAdPlaybackStarted", "audioAd" to audioAd.toMap()))
-        Log.d("Audiomob Demo Project", "onAdPlaybackStarted: $audioAd")
-        // Playback of the ad has begun, use the callback to mute your app's sound.
-    }
-
-    override fun onAdPlaybackCompleted(adPlaybackResult: AdPlaybackResult) {
-        printViewHierarchy(BannerManager.getRoot()!!)
-        eventSink?.success(
-            mapOf(
-                "type" to "onAdPlaybackCompleted",
-                "adPlaybackResult" to adPlaybackResult.name
-            )
-        )
-        Log.d("Audiomob Demo Project", "onAdPlaybackCompleted: $adPlaybackResult")
-        // Playback has completed, use this callback to unmute your app's sound.
-        if (adPlaybackResult == AdPlaybackResult.FINISHED) {
-            // The ad completed, reward your user here.
-        }
-    }
-
-    override fun onAdPlaybackPaused(pauseReason: PauseAdEnum) {
-        eventSink?.success(mapOf("type" to "onAdPlaybackPaused", "pauseReason" to pauseReason.name))
-        Log.d("Audiomob Demo Project", "onAdPlaybackPaused: $pauseReason")
-
-    }
-
-    override fun onAdPlaybackResumed() {
-        eventSink?.success(mapOf("type" to "onAdPlaybackResumed"))
-        Log.d("Audiomob Demo Project", "onAdPlaybackResumed")
-
-    }
+//    override fun onAdAvailabilityRetrieved(result: AdAvailability) {
+//        eventSink?.success(mapOf("type" to "onAdAvailabilityRetrieved", "result" to result.toMap()))
+//        Log.d("Audiomob Demo Project", "Ads are available: " + result.toMap())
+//    }
+//
+//    override fun onAdRequestStarted() {
+//        eventSink?.success(mapOf("type" to "onAdRequestStarted"))
+//        Log.d("Audiomob Demo Project", "onAdRequestStarted")
+//    }
+//
+//    override fun onAdRequestCompleted(adRequestResult: AdRequestResult, audioAd: AudioAd?) {
+//        eventSink?.success(
+//            mapOf(
+//                "type" to "onAdRequestCompleted",
+//                "adRequestResult" to adRequestResult.name,
+//                "audioAd" to audioAd?.toMap()
+//            )
+//        )
+//        Log.d("Audiomob Demo Project", "onAdRequestCompleted: $adRequestResult, $audioAd")
+//        if (adRequestResult != AdRequestResult.FINISHED) {
+//            // The ad request was not successful.
+//        }
+//    }
+//
+//    override fun onAdPlaybackStarted(audioAd: AudioAd) {
+//        printViewHierarchy(BannerManager.getRoot()!!)
+//        eventSink?.success(mapOf("type" to "onAdPlaybackStarted", "audioAd" to audioAd.toMap()))
+//        Log.d("Audiomob Demo Project", "onAdPlaybackStarted: $audioAd")
+//        // Playback of the ad has begun, use the callback to mute your app's sound.
+//    }
+//
+//    override fun onAdPlaybackCompleted(adPlaybackResult: AdPlaybackResult) {
+//        printViewHierarchy(BannerManager.getRoot()!!)
+//        eventSink?.success(
+//            mapOf(
+//                "type" to "onAdPlaybackCompleted",
+//                "adPlaybackResult" to adPlaybackResult.name
+//            )
+//        )
+//        Log.d("Audiomob Demo Project", "onAdPlaybackCompleted: $adPlaybackResult")
+//        // Playback has completed, use this callback to unmute your app's sound.
+//        if (adPlaybackResult == AdPlaybackResult.FINISHED) {
+//            // The ad completed, reward your user here.
+//        }
+//    }
+//
+//    override fun onAdPlaybackPaused(pauseReason: PauseAdEnum) {
+//        eventSink?.success(mapOf("type" to "onAdPlaybackPaused", "pauseReason" to pauseReason.name))
+//        Log.d("Audiomob Demo Project", "onAdPlaybackPaused: $pauseReason")
+//
+//    }
+//
+//    override fun onAdPlaybackResumed() {
+//        eventSink?.success(mapOf("type" to "onAdPlaybackResumed"))
+//        Log.d("Audiomob Demo Project", "onAdPlaybackResumed")
+//
+//    }
 }
 
 
