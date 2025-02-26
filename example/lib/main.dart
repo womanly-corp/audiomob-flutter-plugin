@@ -38,7 +38,7 @@ class _MyAppState extends State<MyApp> {
                 },
                 child: const Text("not skipable | no banner"),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 12),
               ElevatedButton(
                 onPressed: () {
                   _audiomobPlugin.requestAndPlay(
@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
                 },
                 child: const Text("not skipable | rectangle"),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 12),
               ElevatedButton(
                 onPressed: () {
                   _audiomobPlugin.requestAndPlay(
@@ -60,7 +60,7 @@ class _MyAppState extends State<MyApp> {
                 },
                 child: const Text("not skipable | leaderboard"),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 12),
               ElevatedButton(
                 onPressed: () {
                   _audiomobPlugin.requestAndPlay(BannerType.noBanner, true);
@@ -70,7 +70,7 @@ class _MyAppState extends State<MyApp> {
                 },
                 child: const Text("skipable | no banner"),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 12),
               ElevatedButton(
                 onPressed: () {
                   _audiomobPlugin.requestAndPlay(
@@ -81,7 +81,7 @@ class _MyAppState extends State<MyApp> {
                 },
                 child: const Text("skipable | rectangle"),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 12),
               ElevatedButton(
                 onPressed: () {
                   _audiomobPlugin.requestAndPlay(
@@ -92,8 +92,8 @@ class _MyAppState extends State<MyApp> {
                 },
                 child: const Text("skipable | leaderboard"),
               ),
-              const SizedBox(height: 20),
-              BannerWidget(bannerType: _bannerType),
+              const SizedBox(height: 12),
+              BannerWidget(),
             ],
           ),
         ),
