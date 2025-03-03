@@ -6,7 +6,7 @@
     android:id="@+id/parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/audiomob_white"
+    android:background="#33000000"
     android:paddingHorizontal="10dp">
     <LinearLayout
         android:id="@+id/audiomob_unmute_prompt"

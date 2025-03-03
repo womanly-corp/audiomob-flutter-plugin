@@ -14,9 +14,7 @@ class BannerViewFactory(private val messenger: BinaryMessenger) :
         return object : PlatformView {
             override fun getView(): View {
                 val banner = BannerManager.getRoot()
-                if (banner?.parent != null) {
-                    (banner.parent as? ViewGroup)?.removeView(banner)
-                }
+                (banner?.parent as? ViewGroup)?.removeView(banner)
                 return banner ?: BannerView(context, null)
             }
             override fun dispose() {}

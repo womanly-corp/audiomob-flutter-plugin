@@ -27,7 +27,17 @@ abstract class AudiomobPlatform extends PlatformInterface {
 
   EventChannel get eventChannel;
 
+  // TODO remove this class, replace with method channel
+
   Future<void> requestAndPlay(BannerType bannerType, bool skipable) {
+    throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+  Future<void> pause() {
+    throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+  Future<void> resume() {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 }
