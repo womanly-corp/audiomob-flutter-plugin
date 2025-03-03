@@ -40,4 +40,13 @@ class Audiomob {
   Future<void> requestAndPlay(BannerType bannerType, bool skipable) {
     return AudiomobPlatform.instance.requestAndPlay(bannerType, skipable);
   }
+
+
+  Future<void> pause() {
+    return AudiomobPlatform.instance.pause();
+  }
+
+  Future<void> resume() {
+    return AudiomobPlatform.instance.resume();
+  }
 }

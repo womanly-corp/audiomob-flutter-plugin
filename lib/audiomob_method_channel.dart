@@ -23,4 +23,14 @@ class MethodChannelAudiomob extends AudiomobPlatform {
       'skipable': skipable,
     });
   }
+
+  @override
+  Future<void> pause() async {
+    methodChannel.invokeMethod<String>('pause');
+  }
+
+  @override
+  Future<void> resume() async {
+    methodChannel.invokeMethod<String>('resume');
+  }
 }
