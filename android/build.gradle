@@ -25,6 +25,13 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url 'https://wromance-237520028262.d.codeartifact.us-east-1.amazonaws.com/maven/audiomob/'
+            credentials {
+                username "aws"
+                password System.env.CODEARTIFACT_AUTH_TOKEN
+            }
+        }
     }
 }
 
