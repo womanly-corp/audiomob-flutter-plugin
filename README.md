@@ -2,13 +2,10 @@
 
 A new Flutter plugin project.
 
-## Getting Started
-
-Как сделать локальный репозиторий:
+## Publishing AudioMob SDK to AWS CodeArtifact repository
 
 ```zsh
-
-brew install mvn
-mvn install:install-file -Dfile=libs/AudiomobSDK_v3.0.0.aar -DgroupId=com.wromance -DartifactId=audiomob-sdk -Dversion=3.0.0 -Dpackaging=aar -DgeneratePom=true
-
+cd android
+export CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain wromance --domain-owner 237520028262 --region us-east-1 --query authorizationToken --output text`
+./gradlew publish
 ```
