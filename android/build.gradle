@@ -44,7 +44,7 @@ android {
         namespace = "com.wromance.audiomob"
     }
 
-    compileSdk = 34
+    compileSdk = 35
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -66,11 +66,11 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false 
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            minifyEnabled false  // или true, если ты хочешь минимизировать для debug
+            minifyEnabled false  
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
