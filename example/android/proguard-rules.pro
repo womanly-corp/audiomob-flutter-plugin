@@ -16,5 +16,6 @@
 -keep interface org.bouncycastle.**
 -keep class org.conscrypt.** { *; }
 -keep class io.netty.** { *; }
+-keep class com.wromance.audiomob.** { *; }
 -dontwarn io.flutter.embedding.**
 -ignorewarnings

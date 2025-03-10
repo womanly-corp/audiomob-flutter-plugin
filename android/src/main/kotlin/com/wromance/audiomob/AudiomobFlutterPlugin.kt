@@ -1,34 +1,15 @@
 package com.wromance.audiomob
 
-import BannerManager
 import BannerViewFactory
 import android.app.Activity
-import android.content.Context
-import android.graphics.PixelFormat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
-import androidx.core.view.children
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import com.audiomob.sdk.AudiomobPlugin
-import com.audiomob.sdk.data.models.BannerConfiguration
-import com.audiomob.sdk.data.models.CountdownConfiguration
-import com.audiomob.sdk.data.models.RewardedAudioOnlyAdConfiguration
-import com.audiomob.sdk.data.models.RewardedBannerAdConfiguration
-import com.audiomob.sdk.data.models.SkippableAudioOnlyAdConfiguration
-import com.audiomob.sdk.data.models.SkippableBannerAdConfiguration
-import com.audiomob.sdk.data.models.UnmutePromptConfiguration
-import com.audiomob.sdk.data.responses.AdAvailability
-import com.audiomob.sdk.data.responses.AudioAd
-import com.audiomob.sdk.enums.AdPlaybackResult
-import com.audiomob.sdk.enums.AdRequestResult
 import com.audiomob.sdk.enums.BannerSize
-import com.audiomob.sdk.enums.PauseAdEnum
-import io.flutter.embedding.android.FlutterView
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -39,7 +20,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 
-class AudiomobPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
+class AudiomobFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     DefaultLifecycleObserver {
     private lateinit var audiomobPlugin: AudiomobPlugin
     private lateinit var channel: MethodChannel
