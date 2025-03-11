@@ -6,13 +6,6 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        maven {
-            url 'https://wromance-237520028262.d.codeartifact.us-east-1.amazonaws.com/maven/audiomob/'
-            credentials {
-                username "aws"
-                password System.env.CODEARTIFACT_AUTH_TOKEN
-            }
-        }
     }
 
     dependencies {
@@ -29,7 +22,7 @@ allprojects {
             url 'https://wromance-237520028262.d.codeartifact.us-east-1.amazonaws.com/maven/audiomob/'
             credentials {
                 username "aws"
-                password System.env.CODEARTIFACT_AUTH_TOKEN
+                password "eyJ2ZXIiOjEsImlzdSI6MTc0MTU5NDM2NSwiZW5jIjoiQTEyOEdDTSIsInRhZyI6IkVsa0xIQ1BjcF8tekNvelRRa2JyalEiLCJleHAiOjE3NDE2Mzc1NjUsImFsZyI6IkExMjhHQ01LVyIsIml2IjoicWFvMVZOSGd3b29xaVVJZSJ9.O4nQDvYLiq97PKuBEf90nw.nxDv56dpSy3g8KXR.iZUnK_-wYQw3MpJJ225msZKDYuw91e-K3haeEsJoCWhlnqQmYEony80IOLrWIoStssgLtg7d5Luo0vp9BDIyL2SjxPqCUBFx_PA1FUFDN1aoOalwACSnBID5elA22fhCq7Lhy9UeMexlziU4C4KIrQ8WDRP7btxLeWlF2w_U17FBwNHxCKdwYcqJ9Kdf7ZO3aQ1zdZZ3T3DTGSmgjykhy0zxsdOKQ9ya3vrvjrn-eon6Xvv1x_V4SWWzQRulbg2bpFdOnFyRgPrkS4gWpJHdhaaZSCktsUaHSqCwCD88lCGaM-iex3S18wE1ucX40cY2Ba9pmMrXMV74xdbLEPYf7-JiYPPYyEz-1EGXKBpeiwqPXQe8Ym6MZncsKTainhdifSNNen_feasrxOLGJpUIe0921pwHhpn7NhJasBAxmZ3KMoEOMIdDwRMV_ZumhWwJrpyAsH2cq0AuJV_qcvbnTF1dw9fFIz7VUHVU8XsAmGMv-s5PSbWypVZfh6oqoTf1PKFWVljp60mnahW60ex2YT15g_DiNFqPqJ24cVM6nGbOHgoXlf6I9RozgE26DsO6a65EbF_kRsEIWK3BkfFn8hS_nIzqYAJW3cmeWz0SvB1LlPuZJN5Lyt6Ib4dXUbEpjLz6dTcsOgPNb7BY85dqTH0LJNVNjZIw2-eM8fZlCTJiAASoOqUSVL-GjGwBmGy63SN3iRdacu41Iq7cKtiKdOneLlQ-hjymTGO2StaRYLHN_EQacL37T5p4_nUhfKoJXO-vyRP_dO-lwNk7AtLy5GTLPcTeS9d9tPYqeA1xo6T1qV6YF8gk4dQhAdxvTMCRoHuEaUcxsAoMfZNgFc77t_2RAD9n5ICPbkjT5sJDkTAALdUA0SfXpSdjUhqZFIfPF5b84UrORb_CudX-0WIh6wczPYS3m7wfFlFb9-t7UG_SDwXgfnHTSYrrlNDRO583Z58CRau8ab1Q.uPKsINL26shhSb6aBN_OSg"
             }
         }
     }
