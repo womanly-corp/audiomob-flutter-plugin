@@ -16,7 +16,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  BannerType _bannerType = BannerType.rectangleBanner;
   final _audiomobPlugin = Audiomob();
 
   @override
@@ -30,70 +29,20 @@ class _MyAppState extends State<MyApp> {
           child: Column(
             children: [
               ElevatedButton(
-                onPressed: () {
-                  _audiomobPlugin.requestAndPlay(BannerType.noBanner, false);
-                  setState(() {
-                    _bannerType = BannerType.noBanner;
-                  });
-                },
-                child: const Text("not skipable | no banner"),
+                onPressed: () => _audiomobPlugin.requestAndPlay(),
+                child: const Text("request and play"),
               ),
               const SizedBox(height: 12),
               ElevatedButton(
-                onPressed: () {
-                  _audiomobPlugin.requestAndPlay(
-                      BannerType.rectangleBanner, false);
-                  setState(() {
-                    _bannerType = BannerType.rectangleBanner;
-                  });
-                },
-                child: const Text("not skipable | rectangle"),
+                onPressed: () => _audiomobPlugin.pause(),
+                child: const Text("pause"),
               ),
               const SizedBox(height: 12),
               ElevatedButton(
-                onPressed: () {
-                  _audiomobPlugin.requestAndPlay(
-                      BannerType.leaderboardBanner, false);
-                  setState(() {
-                    _bannerType = BannerType.leaderboardBanner;
-                  });
-                },
-                child: const Text("not skipable | leaderboard"),
+                onPressed: () => _audiomobPlugin.resume(),
+                child: const Text("resume"),
               ),
               const SizedBox(height: 12),
-              ElevatedButton(
-                onPressed: () {
-                  _audiomobPlugin.requestAndPlay(BannerType.noBanner, true);
-                  setState(() {
-                    _bannerType = BannerType.noBanner;
-                  });
-                },
-                child: const Text("skipable | no banner"),
-              ),
-              const SizedBox(height: 12),
-              ElevatedButton(
-                onPressed: () {
-                  _audiomobPlugin.requestAndPlay(
-                      BannerType.rectangleBanner, true);
-                  setState(() {
-                    _bannerType = BannerType.rectangleBanner;
-                  });
-                },
-                child: const Text("skipable | rectangle"),
-              ),
-              const SizedBox(height: 12),
-              ElevatedButton(
-                onPressed: () {
-                  _audiomobPlugin.requestAndPlay(
-                      BannerType.leaderboardBanner, true);
-                  setState(() {
-                    _bannerType = BannerType.leaderboardBanner;
-                  });
-                },
-                child: const Text("skipable | leaderboard"),
-              ),
-              const SizedBox(height: 12),
-              BannerWidget(),
             ],
           ),
         ),
