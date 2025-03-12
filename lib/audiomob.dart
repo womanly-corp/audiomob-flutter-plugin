@@ -1,7 +1,6 @@
 import 'package:audiomob/audiomob_event_listener.dart';
+import 'package:audiomob/audiomob_method_channel.dart';
 import 'package:audiomob/banner_type.dart';
-
-import 'audiomob_platform_interface.dart';
 
 class Audiomob {
   AudiomobEventListener? _listener;
@@ -10,7 +9,7 @@ class Audiomob {
   }
 
   void init() {
-    AudiomobPlatform.instance.eventChannel
+    MethodChannelAudiomob.instance.eventChannel
         .receiveBroadcastStream()
         .listen((dynamic data) {
       var _ = switch (data['type']) {
@@ -32,21 +31,20 @@ class Audiomob {
             PauseAdEnum.fromName(data['pauseReason']),
           ),
         'onAdPlaybackResumed' => _listener?.onAdPlaybackResumed(),
-        _ => 999
+        _ => throw Exception('MethodChannelAudiomob: unsupported event')
       };
     });
   }
 
-  Future<void> requestAndPlay(BannerType bannerType, bool skipable) {
-    return AudiomobPlatform.instance.requestAndPlay(bannerType, skipable);
+  Future<void> requestAndPlay() {
+    return MethodChannelAudiomob.instance.requestAndPlay();
   }
 
-
   Future<void> pause() {
-    return AudiomobPlatform.instance.pause();
+    return MethodChannelAudiomob.instance.pause();
   }
 
   Future<void> resume() {
-    return AudiomobPlatform.instance.resume();
+    return MethodChannelAudiomob.instance.resume();
   }
 }

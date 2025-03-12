@@ -1,36 +1,35 @@
-import 'package:audiomob/banner_type.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-import 'audiomob_platform_interface.dart';
+class MethodChannelAudiomob extends PlatformInterface {
+  MethodChannelAudiomob() : super(token: _token);
 
-/// An implementation of [AudiomobPlatform] that uses method channels.
-class MethodChannelAudiomob extends AudiomobPlatform {
-  /// The method channel used to interact with the native platform.
+  static final Object _token = Object();
+
+  static MethodChannelAudiomob _instance = MethodChannelAudiomob();
+
+  static MethodChannelAudiomob get instance => _instance;
+
+  static set instance(MethodChannelAudiomob instance) {
+    PlatformInterface.verifyToken(instance, _token);
+    _instance = instance;
+  }
+
   @visibleForTesting
   final methodChannel = const MethodChannel('audiomob');
-  @override
+
   final eventChannel = const EventChannel("audiomob/events");
 
-  @override
-  Future<void> requestAndPlay(BannerType bannerType, bool skipable) async {
-    await methodChannel.invokeMethod<String>('requestAndPlay', {
-      'bannerType': switch (bannerType) {
-        BannerType.rectangleBanner => 'MEDIUM_RECTANGLE',
-        BannerType.leaderboardBanner => 'MOBILE_LEADERBOARD',
-        BannerType.noBanner => 'NO_BANNER',
-      },
-      'skipable': skipable,
-    });
+  Future<void> requestAndPlay() async {
+    await methodChannel.invokeMethod<String>('requestAndPlay');
   }
 
-  @override
   Future<void> pause() async {
-    methodChannel.invokeMethod<String>('pause');
+    await methodChannel.invokeMethod<String>('pause');
   }
 
-  @override
   Future<void> resume() async {
-    methodChannel.invokeMethod<String>('resume');
+    await methodChannel.invokeMethod<String>('resume');
   }
 }
