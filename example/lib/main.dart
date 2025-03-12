@@ -1,6 +1,3 @@
-import 'package:audiomob/banner_type.dart';
-import 'package:audiomob/banner_widget.dart';
-
 import 'package:flutter/material.dart';
 import 'package:audiomob/audiomob.dart';
 
