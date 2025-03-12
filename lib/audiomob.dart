@@ -10,18 +10,19 @@ class Audiomob {
   void init() {
     MethodChannelAudiomob.instance.eventChannel
         .receiveBroadcastStream()
-        .listen((dynamic data) {
+        .listen((dynamic rawData) {
+      final data = (rawData as Map).cast<String, dynamic>();
       var _ = switch (data['type']) {
         'onAdAvailabilityRetrieved' => _listener?.onAdAvailabilityRetrieved(
-            AdAvailability.fromMap(data['result']),
+            AdAvailability.fromMap((data['result'] as Map).cast<String, dynamic>()),
           ),
         'onAdRequestStarted' => _listener?.onAdRequestStarted(),
         'onAdRequestCompleted' => _listener?.onAdRequestCompleted(
             AdRequestResult.fromName(data['adRequestResult']),
-            AudioAd.fromMap(data['audioAd']),
+            AudioAd.fromMap((data['audioAd'] as Map).cast<String, dynamic>()),
           ),
         'onAdPlaybackStarted' => _listener?.onAdPlaybackStarted(
-            AudioAd.fromMap(data['audioAd']),
+            AudioAd.fromMap((data['audioAd'] as Map).cast<String, dynamic>()),
           ),
         'onAdPlaybackCompleted' => _listener?.onAdPlaybackCompleted(
             AdPlaybackResult.fromName(data['adPlaybackResult']),
