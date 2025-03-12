@@ -1,6 +1,5 @@
 import 'package:audiomob/audiomob_event_listener.dart';
 import 'package:audiomob/audiomob_method_channel.dart';
-import 'package:audiomob/banner_type.dart';
 
 class Audiomob {
   AudiomobEventListener? _listener;
