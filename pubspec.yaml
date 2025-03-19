@@ -8,6 +8,10 @@ environment:
   flutter: '>=3.3.0'
 
 dependencies:
+  app_shared_libs:
+    git:
+      url: git@github.com:womanly-corp/app_shared_libs.git
+      ref: 1.0.50
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.0.2

@@ -1,58 +1,60 @@
+import 'package:app_shared_libs/app_shared_libs.dart';
+
 class AudiomobEventListener {
-  void onAdAvailabilityRetrieved(AdAvailability? result) {}
+  void onAdAvailabilityRetrieved(AdAvailability result) {}
   void onAdRequestStarted() {}
-  void onAdPlaybackCompleted(AdPlaybackResult? adPlaybackResult) {}
-  void onAdPlaybackPaused(PauseAdEnum? pauseReason) {}
+  void onAdPlaybackCompleted(AdPlaybackResult adPlaybackResult) {}
+  void onAdPlaybackPaused(PauseAdEnum pauseReason) {}
   void onAdPlaybackResumed() {}
-  void onAdPlaybackStarted(AudioAd? audioAd) {}
+  void onAdPlaybackStarted(AudioAd audioAd) {}
   void onAdRequestCompleted(
-      AdRequestResult? adRequestResult, AudioAd? audioAd) {}
+      AdRequestResult adRequestResult, AudioAd? audioAd) {}
 }
 
 class AdAvailability {
-  final bool? adsAvailable;
-  final double? estimatedCpm;
-  final String? geo;
-  final double? estimatedRevenue;
+  final bool adsAvailable;
+  final double estimatedCpm;
+  final String geo;
+  final double estimatedRevenue;
 
   AdAvailability({
-    this.adsAvailable,
-    this.estimatedCpm,
-    this.geo,
-    this.estimatedRevenue,
+    required this.adsAvailable,
+    required this.estimatedCpm,
+    required this.geo,
+    required this.estimatedRevenue,
   });
 
   factory AdAvailability.fromMap(Map<String, dynamic> map) {
     return AdAvailability(
-      adsAvailable: map['adsAvailable'],
-      estimatedCpm: map['estimatedCpm'],
-      geo: map['geo'],
-      estimatedRevenue: map['estimatedRevenue'],
+      adsAvailable: boolFromJson(map['adsAvailable']),
+      estimatedCpm: map['estimatedCpm'] ?? 0,
+      geo: map['geo'] ?? '',
+      estimatedRevenue: map['estimatedRevenue'] ?? 0,
     );
   }
 }
 
 class AudioAd {
-  final double? estimatedRevenue;
-  final double? estimatedCpm;
-  final double? duration;
-  final String? id;
-  final BannerSize? companionBanner;
+  final double estimatedRevenue;
+  final double estimatedCpm;
+  final double duration;
+  final String id;
+  final BannerSize companionBanner;
 
   AudioAd({
     required this.estimatedRevenue,
     required this.estimatedCpm,
     required this.duration,
     required this.id,
-    this.companionBanner,
+    required this.companionBanner,
   });
 
   factory AudioAd.fromMap(Map<String, dynamic> map) {
     return AudioAd(
-      estimatedRevenue: map['estimatedRevenue'],
-      estimatedCpm: map['estimatedCpm'],
-      duration: map['duration'],
-      id: map['id'],
+      estimatedRevenue: map['estimatedRevenue'] ?? 0,
+      estimatedCpm: map['estimatedCpm'] ?? 0,
+      duration: map['duration'] ?? 0,
+      id: map['id'] ?? '',
       companionBanner: BannerSize.fromName(map['companionBanner']),
     );
   }
