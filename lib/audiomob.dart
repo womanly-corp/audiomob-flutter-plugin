@@ -14,7 +14,11 @@ class Audiomob {
   }
 
   /// Initializes the event channel listener to receive and handle Audiomob events
-  void init() {
+  Future<void> init(
+    String apiKey,
+    String bundleId,
+    bool isBackgroundModeEnabled,
+  ) async {
     _eventChannelListener = MethodChannelAudiomob.instance.eventChannel
         .receiveBroadcastStream()
         .listen((dynamic rawData) {
@@ -42,6 +46,11 @@ class Audiomob {
         _ => throw Exception('MethodChannelAudiomob: unsupported event')
       };
     });
+    await MethodChannelAudiomob.instance.init(
+      apiKey,
+      bundleId,
+      isBackgroundModeEnabled,
+    );
   }
 
   /// Disposes the event listener to clean up resources

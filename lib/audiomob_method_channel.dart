@@ -21,6 +21,18 @@ class MethodChannelAudiomob extends PlatformInterface {
 
   final eventChannel = const EventChannel("audiomob/events");
 
+  Future<void> init(
+    String apiKey,
+    String bundleId,
+    bool isBackgroundModeEnabled,
+  ) async {
+    await methodChannel.invokeMethod<String>('init', {
+      'apiKey': apiKey,
+      'bundleId': bundleId,
+      'isBackgroundModeEnabled': isBackgroundModeEnabled,
+    });
+  }
+
   Future<void> requestAndPlay() async {
     await methodChannel.invokeMethod<String>('requestAndPlay');
   }
