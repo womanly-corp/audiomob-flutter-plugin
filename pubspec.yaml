@@ -1,7 +1,7 @@
 name: audiomob
-description: "Flutter plugin for AudiMob audio ad monetization: https://audiomob.com/"
+description: "A Flutter plugin for integrating AudioMob audio ads into your Flutter applications."
 version: 0.0.2
-homepage:
+homepage: https://github.com/womanly-corp/audiomob-flutter-plugin
 
 environment:
   sdk: ^3.5.4
