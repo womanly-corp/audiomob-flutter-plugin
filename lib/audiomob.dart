@@ -1,20 +1,24 @@
+import 'dart:async';
+
 import 'package:audiomob/audiomob_event_listener.dart';
 import 'package:audiomob/audiomob_method_channel.dart';
 
 class Audiomob {
   AudiomobEventListener? _listener;
+  StreamSubscription? _eventChannelListener;
   void setListener(AudiomobEventListener? listener) {
     _listener = listener;
   }
 
   void init() {
-    MethodChannelAudiomob.instance.eventChannel
+    _eventChannelListener = MethodChannelAudiomob.instance.eventChannel
         .receiveBroadcastStream()
         .listen((dynamic rawData) {
       final data = (rawData as Map).cast<String, dynamic>();
       var _ = switch (data['type']) {
         'onAdAvailabilityRetrieved' => _listener?.onAdAvailabilityRetrieved(
-            AdAvailability.fromMap((data['result'] as Map).cast<String, dynamic>()),
+            AdAvailability.fromMap(
+                (data['result'] as Map).cast<String, dynamic>()),
           ),
         'onAdRequestStarted' => _listener?.onAdRequestStarted(),
         'onAdRequestCompleted' => _listener?.onAdRequestCompleted(
@@ -34,6 +38,11 @@ class Audiomob {
         _ => throw Exception('MethodChannelAudiomob: unsupported event')
       };
     });
+  }
+
+  void dispose() {
+    _eventChannelListener?.cancel();
+    _eventChannelListener = null;
   }
 
   Future<void> requestAndPlay() {
