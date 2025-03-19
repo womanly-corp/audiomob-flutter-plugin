@@ -59,38 +59,93 @@ class AudioAd {
 }
 
 enum BannerSize {
-  NO_BANNER,
-  MEDIUM_RECTANGLE,
-  MOBILE_LEADERBOARD;
+  noBanner,
+  mediumRectangle,
+  mobileLeaderboard;
 
-  static BannerSize? fromName(String? name) => values.asNameMap()[name];
+  static BannerSize fromName(String? name) {
+    switch (name) {
+      case 'NO_BANNER':
+        return BannerSize.noBanner;
+      case 'MEDIUM_RECTANGLE':
+        return BannerSize.mediumRectangle;
+      case 'MOBILE_LEADERBOARD':
+        return BannerSize.mobileLeaderboard;
+      default:
+        return BannerSize.noBanner;
+    }
+  }
 }
 
 enum AdRequestResult {
-  UNKNOWN,
-  FINISHED,
-  NO_AD_AVAILABLE,
-  FREQUENCY_CAP_REACHED,
-  FAILED,
-  SKIPPABLE_REQUEST_VOLUME_NOT_AUDIBLE;
+  unknown,
+  finished,
+  noAdAvailable,
+  frequencyCapReached,
+  failed,
+  skippableRequestVolumeNotAudible;
 
-  static AdRequestResult? fromName(String? name) => values.asNameMap()[name];
+  static AdRequestResult fromName(String? name) {
+    switch (name) {
+      case 'UNKNOWN':
+        return AdRequestResult.unknown;
+      case 'FINISHED':
+        return AdRequestResult.finished;
+      case 'NO_AD_AVAILABLE':
+        return AdRequestResult.noAdAvailable;
+      case 'FREQUENCY_CAP_REACHED':
+        return AdRequestResult.frequencyCapReached;
+      case 'FAILED':
+        return AdRequestResult.failed;
+      case 'SKIPPABLE_REQUEST_VOLUME_NOT_AUDIBLE':
+        return AdRequestResult.skippableRequestVolumeNotAudible;
+      default:
+        return AdRequestResult.unknown;
+    }
+  }
 }
 
 enum AdPlaybackResult {
-  FINISHED,
-  STOPPED,
-  SKIPPED,
-  FAILED,
-  CANCELED;
+  finished,
+  stopped,
+  skipped,
+  failed,
+  canceled;
 
-  static AdPlaybackResult? fromName(String? name) => values.asNameMap()[name];
+  static AdPlaybackResult fromName(String? name) {
+    switch (name) {
+      case 'FINISHED':
+        return AdPlaybackResult.finished;
+      case 'STOPPED':
+        return AdPlaybackResult.stopped;
+      case 'SKIPPED':
+        return AdPlaybackResult.skipped;
+      case 'FAILED':
+        return AdPlaybackResult.failed;
+      case 'CANCELED':
+        return AdPlaybackResult.canceled;
+      default:
+        return AdPlaybackResult.failed;
+    }
+  }
 }
 
 enum PauseAdEnum {
-  PhoneVolumeLowered,
-  PauseMethodCalled,
-  AppInBackground;
+  phoneVolumeLowered,
+  pauseMethodCalled,
+  appInBackground,
+  unknown;
 
-  static PauseAdEnum? fromName(String? name) => values.asNameMap()[name];
+  static PauseAdEnum fromName(String? name) {
+    switch (name) {
+      case 'PhoneVolumeLowered':
+        return PauseAdEnum.phoneVolumeLowered;
+      case 'PauseMethodCalled':
+        return PauseAdEnum.pauseMethodCalled;
+      case 'AppInBackground':
+        return PauseAdEnum.appInBackground;
+      default:
+        return PauseAdEnum.unknown;
+    }
+  }
 }
