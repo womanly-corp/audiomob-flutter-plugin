@@ -3,13 +3,17 @@ import 'dart:async';
 import 'package:audiomob/audiomob_event_listener.dart';
 import 'package:audiomob/audiomob_method_channel.dart';
 
+/// Manages event listening and interaction with the Audiomob plugin.
 class Audiomob {
   AudiomobEventListener? _listener;
   StreamSubscription? _eventChannelListener;
+
+  /// Sets the event listener for handling Audiomob events
   void setListener(AudiomobEventListener? listener) {
     _listener = listener;
   }
 
+  /// Initializes the event channel listener to receive and handle Audiomob events
   void init() {
     _eventChannelListener = MethodChannelAudiomob.instance.eventChannel
         .receiveBroadcastStream()
@@ -40,19 +44,23 @@ class Audiomob {
     });
   }
 
+  /// Disposes the event listener to clean up resources
   void dispose() {
     _eventChannelListener?.cancel();
     _eventChannelListener = null;
   }
 
+  /// Requests and plays an ad through the Audiomob plugin.
   Future<void> requestAndPlay() {
     return MethodChannelAudiomob.instance.requestAndPlay();
   }
 
+  /// Pauses the currently playing ad.
   Future<void> pause() {
     return MethodChannelAudiomob.instance.pause();
   }
 
+  /// Resumes playback of a paused ad.
   Future<void> resume() {
     return MethodChannelAudiomob.instance.resume();
   }
