@@ -46,9 +46,6 @@ class AudiomobFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
         })
 
         audiomobPlugin = AudiomobPlugin(flutterPluginBinding.applicationContext)
-        // TODO HARDCODE
-        // TODO check bundle id
-        audiomobPlugin.initialise("YG3pZ95T7Wk9ZBj0EB9M", "com.wromance.mobile.ads", true)
         audiomobPlugin.setCallbacks(audiomobListener)
     }
 
@@ -58,19 +55,32 @@ class AudiomobFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
-        if (call.method == "requestAndPlay") {
-            audiomobPlugin.requestAndPlayAd()
-            result.success(null)
-        } else if (call.method == "pause") {
-            if (audiomobListener.audioAd != null)
-                audiomobPlugin.pauseAd()
-            result.success(null)
-        } else if (call.method == "resume") {
-            if (audiomobListener.audioAd != null)
-                audiomobPlugin.resumePausedAd()
-            result.success(null)
-        } else {
-            result.notImplemented()
+        when (call.method) {
+            "init" -> {
+                val apiKey = call.argument<String>("apiKey") ?: ""
+                val bundleId = call.argument<String>("bundleId") ?: ""
+                val isBackgroundModeEnabled = call.argument<Boolean>("isBackgroundModeEnabled") ?: false
+                
+                audiomobPlugin.initialise(apiKey, bundleId, isBackgroundModeEnabled)
+                result.success(null)
+            }
+            "requestAndPlay" -> {
+                audiomobPlugin.requestAndPlayAd()
+                result.success(null)
+            }
+            "pause" -> {
+                if (audiomobListener.audioAd != null) {
+                    audiomobPlugin.pauseAd()
+                }
+                result.success(null)
+            }
+            "resume" -> {
+                if (audiomobListener.audioAd != null) {
+                    audiomobPlugin.resumePausedAd()
+                }
+                result.success(null)
+            }
+            else -> result.notImplemented()
         }
     }
 
