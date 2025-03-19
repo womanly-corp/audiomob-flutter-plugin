@@ -1,5 +1,3 @@
-import 'package:app_shared_libs/app_shared_libs.dart';
-
 class AudiomobEventListener {
   void onAdAvailabilityRetrieved(AdAvailability result) {}
   void onAdRequestStarted() {}
@@ -26,7 +24,7 @@ class AdAvailability {
 
   factory AdAvailability.fromMap(Map<String, dynamic> map) {
     return AdAvailability(
-      adsAvailable: boolFromJson(map['adsAvailable']),
+      adsAvailable: map['adsAvailable'] ?? false,
       estimatedCpm: map['estimatedCpm'] ?? 0,
       geo: map['geo'] ?? '',
       estimatedRevenue: map['estimatedRevenue'] ?? 0,
