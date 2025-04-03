@@ -44,4 +44,8 @@ class MethodChannelAudiomob extends PlatformInterface {
   Future<void> resume() async {
     await methodChannel.invokeMethod<String>('resume');
   }
+
+  Future<void> getAdAvailability() async {
+    await methodChannel.invokeMethod<String>('getAdAvailability');
+  }
 }

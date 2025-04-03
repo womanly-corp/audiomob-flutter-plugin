@@ -1,3 +1,4 @@
+import 'package:audiomob/audiomob_event_listener.dart';
 import 'package:flutter/material.dart';
 import 'package:audiomob/audiomob.dart';
 
@@ -13,7 +14,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _audiomobPlugin = Audiomob();
+  final _audiomobPlugin = Audiomob()..setListener(SampleListener());
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +26,11 @@ class _MyAppState extends State<MyApp> {
         body: Center(
           child: Column(
             children: [
+              ElevatedButton(
+                onPressed: () => _audiomobPlugin.getAdAvailability(),
+                child: const Text("getAdAvailability"),
+              ),
+              const SizedBox(height: 12),
               ElevatedButton(
                 onPressed: () => _audiomobPlugin.requestAndPlay(),
                 child: const Text("request and play"),
@@ -45,5 +51,36 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
     );
+  }
+}
+
+class SampleListener extends AudiomobEventListener {
+  void onAdAvailabilityRetrieved(AdAvailability result) {
+    print('onAdAvailabilityRetrieved: result = $result');
+  }
+
+  void onAdRequestStarted() {
+    print('onAdRequestStarted');
+  }
+
+  void onAdPlaybackCompleted(AdPlaybackResult adPlaybackResult) {
+    print('onAdPlaybackCompleted: adPlaybackResult = $adPlaybackResult');
+  }
+
+  void onAdPlaybackPaused(PauseAdEnum pauseReason) {
+    print('onAdPlaybackPaused: pauseReason = $pauseReason');
+  }
+
+  void onAdPlaybackResumed() {
+    print('onAdPlaybackResumed');
+  }
+
+  void onAdPlaybackStarted(AudioAd audioAd) {
+    print('onAdPlaybackStarted: audioAd = $audioAd');
+  }
+
+  void onAdRequestCompleted(AdRequestResult adRequestResult, AudioAd? audioAd) {
+    print(
+        'onAdRequestCompleted: adRequestResult = $adRequestResult, audioAd = $audioAd');
   }
 }

@@ -10,6 +10,7 @@ import com.audiomob.sdk.data.responses.AudioAd
 import com.audiomob.sdk.enums.AdPlaybackResult
 import com.audiomob.sdk.enums.AdRequestResult
 import com.audiomob.sdk.enums.PauseAdEnum
+import com.audiomob.sdk.enums.Placement
 import com.audiomob.sdk.interfaces.managers.IAudiomobCallback
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -66,6 +67,10 @@ class AudiomobFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
             }
             "requestAndPlay" -> {
                 audiomobPlugin.requestAndPlayAd()
+                result.success(null)
+            }
+            "getAdAvailability" -> {
+                audiomobPlugin.getAdAvailability(Placement.REWARDED)
                 result.success(null)
             }
             "pause" -> {

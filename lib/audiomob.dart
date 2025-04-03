@@ -73,4 +73,8 @@ class Audiomob {
   Future<void> resume() {
     return MethodChannelAudiomob.instance.resume();
   }
+
+  Future<void> getAdAvailability() {
+    return MethodChannelAudiomob.instance.getAdAvailability();
+  }
 }
