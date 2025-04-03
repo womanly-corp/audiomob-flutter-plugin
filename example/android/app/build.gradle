@@ -47,7 +47,6 @@ android {
 
 
     dependencies {
-        implementation(name: 'AudiomobSDK_v3.0.0', ext: 'aar')
     }
 }
 
