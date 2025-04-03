@@ -21,6 +21,9 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class AudiomobFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     DefaultLifecycleObserver {
@@ -60,31 +63,41 @@ class AudiomobFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
             "init" -> {
                 val apiKey = call.argument<String>("apiKey") ?: ""
                 val bundleId = call.argument<String>("bundleId") ?: ""
-                val isBackgroundModeEnabled = call.argument<Boolean>("isBackgroundModeEnabled") ?: false
-                
+                val isBackgroundModeEnabled =
+                    call.argument<Boolean>("isBackgroundModeEnabled") ?: false
+
                 audiomobPlugin.initialise(apiKey, bundleId, isBackgroundModeEnabled)
                 result.success(null)
             }
+
             "requestAndPlay" -> {
                 audiomobPlugin.requestAndPlayAd()
                 result.success(null)
             }
+
             "getAdAvailability" -> {
-                audiomobPlugin.getAdAvailability(Placement.REWARDED)
+                val placement = when (call.argument<String>("placement")) {
+                    "rewarded" -> Placement.REWARDED
+                    else -> Placement.SKIPPABLE
+                }
+                audiomobPlugin.getAdAvailability(placement)
                 result.success(null)
             }
+
             "pause" -> {
                 if (audiomobListener.audioAd != null) {
                     audiomobPlugin.pauseAd()
                 }
                 result.success(null)
             }
+
             "resume" -> {
                 if (audiomobListener.audioAd != null) {
                     audiomobPlugin.resumePausedAd()
                 }
                 result.success(null)
             }
+
             else -> result.notImplemented()
         }
     }
@@ -123,12 +136,21 @@ class AudiomobFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     }
 }
 
-class AudiomobPluginListener: IAudiomobCallback {
+class AudiomobPluginListener : IAudiomobCallback {
     var eventSink: EventChannel.EventSink? = null
     var audioAd: AudioAd? = null
 
     override fun onAdAvailabilityRetrieved(result: AdAvailability) {
-        eventSink?.success(mapOf("type" to "onAdAvailabilityRetrieved", "result" to result.toMap()))
+        // for some reason that event is exceptional: it is called from some not-main thread
+        // please fill issue for that case
+        GlobalScope.launch(Dispatchers.Main) {
+            eventSink?.success(
+                mapOf(
+                    "type" to "onAdAvailabilityRetrieved",
+                    "result" to result.toMap()
+                )
+            )
+        }
         Log.d("Audiomob", "Ads are available: " + result.toMap())
     }
 

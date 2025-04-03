@@ -27,7 +27,8 @@ class _MyAppState extends State<MyApp> {
           child: Column(
             children: [
               ElevatedButton(
-                onPressed: () => _audiomobPlugin.getAdAvailability(),
+                onPressed: () =>
+                    _audiomobPlugin.getAdAvailability(Placement.rewarded),
                 child: const Text("getAdAvailability"),
               ),
               const SizedBox(height: 12),

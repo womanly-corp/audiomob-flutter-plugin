@@ -74,7 +74,7 @@ class Audiomob {
     return MethodChannelAudiomob.instance.resume();
   }
 
-  Future<void> getAdAvailability() {
-    return MethodChannelAudiomob.instance.getAdAvailability();
+  Future<void> getAdAvailability(Placement placement) {
+    return MethodChannelAudiomob.instance.getAdAvailability(placement);
   }
 }

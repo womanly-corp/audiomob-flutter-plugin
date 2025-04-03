@@ -1,3 +1,4 @@
+import 'package:audiomob/audiomob_event_listener.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
@@ -45,7 +46,8 @@ class MethodChannelAudiomob extends PlatformInterface {
     await methodChannel.invokeMethod<String>('resume');
   }
 
-  Future<void> getAdAvailability() async {
-    await methodChannel.invokeMethod<String>('getAdAvailability');
+  Future<void> getAdAvailability(Placement placement) async {
+    await methodChannel
+        .invokeMethod<String>('getAdAvailability', {'placement': 'default'});
   }
 }

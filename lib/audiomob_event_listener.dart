@@ -149,3 +149,8 @@ enum PauseAdEnum {
     }
   }
 }
+
+enum Placement {
+  rewarded,
+  skippable;
+}
