@@ -48,6 +48,6 @@ class MethodChannelAudiomob extends PlatformInterface {
 
   Future<void> getAdAvailability(Placement placement) async {
     await methodChannel
-        .invokeMethod<String>('getAdAvailability', {'placement': 'default'});
+        .invokeMethod<String>('getAdAvailability', {'placement': placement.name});
   }
 }
