@@ -6,6 +6,11 @@ import 'audiomob_method_channel.dart';
 
 /// Manages event listening and interaction with the Audiomob plugin.
 class Audiomob {
+  Audiomob._();
+
+  /// there should be only one instance of Audiomob
+  static final instance = Audiomob._();
+
   AudiomobEventListener? _listener;
   StreamSubscription? _eventChannelListener;
   bool get isInitialized => _eventChannelListener != null;

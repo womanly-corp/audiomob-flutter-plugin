@@ -13,7 +13,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _audiomobPlugin = Audiomob()..setListener(SampleListener());
+  final _audiomobPlugin = Audiomob.instance..setListener(SampleListener());
 
   @override
   Widget build(BuildContext context) {
