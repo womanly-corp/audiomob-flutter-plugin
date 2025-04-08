@@ -1,6 +1,6 @@
 name: audiomob
 description: "A plugin for integrating AudioMob audio ads into your Flutter applications."
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/womanly-corp/audiomob-flutter-plugin
 
 environment:
