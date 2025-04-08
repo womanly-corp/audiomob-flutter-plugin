@@ -1,18 +1,19 @@
-import 'package:audiomob/audiomob_event_listener.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
+import 'audiomob_event_listener.dart';
+
 class MethodChannelAudiomob extends PlatformInterface {
   MethodChannelAudiomob() : super(token: _token);
 
-  static final Object _token = Object();
+  static final _token = Object();
 
-  static MethodChannelAudiomob _instance = MethodChannelAudiomob();
+  static var _instance = MethodChannelAudiomob();
 
   static MethodChannelAudiomob get instance => _instance;
 
-  static set instance(MethodChannelAudiomob instance) {
+  static set instance(final MethodChannelAudiomob instance) {
     PlatformInterface.verifyToken(instance, _token);
     _instance = instance;
   }
@@ -20,13 +21,13 @@ class MethodChannelAudiomob extends PlatformInterface {
   @visibleForTesting
   final methodChannel = const MethodChannel('audiomob');
 
-  final eventChannel = const EventChannel("audiomob/events");
+  final eventChannel = const EventChannel('audiomob/events');
 
-  Future<void> init(
-    String apiKey,
-    String bundleId,
-    bool isBackgroundModeEnabled,
-  ) async {
+  Future<void> init({
+    required final String apiKey,
+    required final String bundleId,
+    required final bool isBackgroundModeEnabled,
+  }) async {
     await methodChannel.invokeMethod<String>('init', {
       'apiKey': apiKey,
       'bundleId': bundleId,
@@ -46,8 +47,10 @@ class MethodChannelAudiomob extends PlatformInterface {
     await methodChannel.invokeMethod<String>('resume');
   }
 
-  Future<void> getAdAvailability(Placement placement) async {
-    await methodChannel
-        .invokeMethod<String>('getAdAvailability', {'placement': placement.name});
+  Future<void> getAdAvailability(final Placement placement) async {
+    await methodChannel.invokeMethod<String>(
+      'getAdAvailability',
+      {'placement': placement.name},
+    );
   }
 }

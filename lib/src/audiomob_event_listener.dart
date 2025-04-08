@@ -1,45 +1,43 @@
+import 'package:flutter/material.dart';
+
 class AudiomobEventListener {
-  void onAdAvailabilityRetrieved(AdAvailability result) {}
+  void onAdAvailabilityRetrieved(final AdAvailability result) {}
   void onAdRequestStarted() {}
-  void onAdPlaybackCompleted(AdPlaybackResult adPlaybackResult) {}
-  void onAdPlaybackPaused(PauseAdEnum pauseReason) {}
+  void onAdPlaybackCompleted(final AdPlaybackResult adPlaybackResult) {}
+  void onAdPlaybackPaused(final PauseAdEnum pauseReason) {}
   void onAdPlaybackResumed() {}
-  void onAdPlaybackStarted(AudioAd audioAd) {}
+  void onAdPlaybackStarted(final AudioAd audioAd) {}
   void onAdRequestCompleted(
-      AdRequestResult adRequestResult, AudioAd? audioAd) {}
+    final AdRequestResult adRequestResult,
+    final AudioAd? audioAd,
+  ) {}
 }
 
+@immutable
 class AdAvailability {
-  final bool adsAvailable;
-  final double estimatedCpm;
-  final String geo;
-  final double estimatedRevenue;
-
-  AdAvailability({
+  const AdAvailability({
     required this.adsAvailable,
     required this.estimatedCpm,
     required this.geo,
     required this.estimatedRevenue,
   });
 
-  factory AdAvailability.fromMap(Map<String, dynamic> map) {
-    return AdAvailability(
-      adsAvailable: map['adsAvailable'] ?? false,
-      estimatedCpm: map['estimatedCpm'] ?? 0,
-      geo: map['geo'] ?? '',
-      estimatedRevenue: map['estimatedRevenue'] ?? 0,
-    );
-  }
+  factory AdAvailability.fromMap(final Map<String, dynamic> map) =>
+      AdAvailability(
+        adsAvailable: map['adsAvailable'] ?? false,
+        estimatedCpm: map['estimatedCpm'] ?? 0,
+        geo: map['geo'] ?? '',
+        estimatedRevenue: map['estimatedRevenue'] ?? 0,
+      );
+  final bool adsAvailable;
+  final double estimatedCpm;
+  final String geo;
+  final double estimatedRevenue;
 }
 
+@immutable
 class AudioAd {
-  final double estimatedRevenue;
-  final double estimatedCpm;
-  final double duration;
-  final String id;
-  final BannerSize companionBanner;
-
-  AudioAd({
+  const AudioAd({
     required this.estimatedRevenue,
     required this.estimatedCpm,
     required this.duration,
@@ -47,15 +45,18 @@ class AudioAd {
     required this.companionBanner,
   });
 
-  factory AudioAd.fromMap(Map<String, dynamic> map) {
-    return AudioAd(
-      estimatedRevenue: map['estimatedRevenue'] ?? 0,
-      estimatedCpm: map['estimatedCpm'] ?? 0,
-      duration: map['duration'] ?? 0,
-      id: map['id'] ?? '',
-      companionBanner: BannerSize.fromName(map['companionBanner']),
-    );
-  }
+  factory AudioAd.fromMap(final Map<String, dynamic> map) => AudioAd(
+        estimatedRevenue: map['estimatedRevenue'] ?? 0,
+        estimatedCpm: map['estimatedCpm'] ?? 0,
+        duration: map['duration'] ?? 0,
+        id: map['id'] ?? '',
+        companionBanner: BannerSize.fromName(map['companionBanner']),
+      );
+  final double estimatedRevenue;
+  final double estimatedCpm;
+  final double duration;
+  final String id;
+  final BannerSize companionBanner;
 }
 
 enum BannerSize {
@@ -63,7 +64,7 @@ enum BannerSize {
   mediumRectangle,
   mobileLeaderboard;
 
-  static BannerSize fromName(String? name) {
+  factory BannerSize.fromName(final String? name) {
     switch (name) {
       case 'NO_BANNER':
         return BannerSize.noBanner;
@@ -85,7 +86,7 @@ enum AdRequestResult {
   failed,
   skippableRequestVolumeNotAudible;
 
-  static AdRequestResult fromName(String? name) {
+  factory AdRequestResult.fromName(final String? name) {
     switch (name) {
       case 'UNKNOWN':
         return AdRequestResult.unknown;
@@ -112,7 +113,7 @@ enum AdPlaybackResult {
   failed,
   canceled;
 
-  static AdPlaybackResult fromName(String? name) {
+  factory AdPlaybackResult.fromName(final String? name) {
     switch (name) {
       case 'FINISHED':
         return AdPlaybackResult.finished;
@@ -136,7 +137,7 @@ enum PauseAdEnum {
   appInBackground,
   unknown;
 
-  static PauseAdEnum fromName(String? name) {
+  factory PauseAdEnum.fromName(final String? name) {
     switch (name) {
       case 'PhoneVolumeLowered':
         return PauseAdEnum.phoneVolumeLowered;

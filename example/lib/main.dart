@@ -1,6 +1,5 @@
-import 'package:audiomob/audiomob_event_listener.dart';
-import 'package:flutter/material.dart';
 import 'package:audiomob/audiomob.dart';
+import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MyApp());
@@ -56,30 +55,37 @@ class _MyAppState extends State<MyApp> {
 }
 
 class SampleListener extends AudiomobEventListener {
+  @override
   void onAdAvailabilityRetrieved(AdAvailability result) {
     print('onAdAvailabilityRetrieved: result = $result');
   }
 
+  @override
   void onAdRequestStarted() {
     print('onAdRequestStarted');
   }
 
+  @override
   void onAdPlaybackCompleted(AdPlaybackResult adPlaybackResult) {
     print('onAdPlaybackCompleted: adPlaybackResult = $adPlaybackResult');
   }
 
+  @override
   void onAdPlaybackPaused(PauseAdEnum pauseReason) {
     print('onAdPlaybackPaused: pauseReason = $pauseReason');
   }
 
+  @override
   void onAdPlaybackResumed() {
     print('onAdPlaybackResumed');
   }
 
+  @override
   void onAdPlaybackStarted(AudioAd audioAd) {
     print('onAdPlaybackStarted: audioAd = $audioAd');
   }
 
+  @override
   void onAdRequestCompleted(AdRequestResult adRequestResult, AudioAd? audioAd) {
     print(
         'onAdRequestCompleted: adRequestResult = $adRequestResult, audioAd = $audioAd');
