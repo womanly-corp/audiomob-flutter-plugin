@@ -18,6 +18,9 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        flatDir {
+            dirs 'libs'
+        }
     }
 }
 
@@ -44,7 +47,8 @@ android {
     sourceSets {
         main.java.srcDirs += "src/main/kotlin"
         test.java.srcDirs += "src/test/kotlin"
-        main.jniLibs.srcDirs = ['libs']
+        // for testig purposes enable this line and add android/libs/AudiomobSDK_v3.0.0.aar to the app/libs folder
+        // main.jniLibs.srcDirs = ['libs']
     }
 
     defaultConfig {
@@ -67,7 +71,7 @@ android {
         testImplementation("org.mockito:mockito-core:5.0.0")
 
         // AudioMob SDK 
-        /// for testig purposes enable this line and add android/libs/AudiomobSDK_v3.0.0.aar to the app/libs folder
+        // for testig purposes enable this line and add android/libs/AudiomobSDK_v3.0.0.aar to the app/libs folder
         // implementation files('libs/AudiomobSDK_v3.0.0.aar')
         implementation(name: 'AudiomobSDK_v3.0.0', ext: 'aar')
 
