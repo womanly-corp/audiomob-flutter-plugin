@@ -485,8 +485,8 @@ class AudiomobHostApi {
   final String pigeonVar_messageChannelSuffix;
 
   /// Initializes the Audiomob Android SDK
-  Future<void> initialise(String apiKey, String bundleId, bool backgroundModeEnabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.audiomob.AudiomobHostApi.initialise$pigeonVar_messageChannelSuffix';
+  Future<void> initialize(String apiKey, String bundleId, bool backgroundModeEnabled) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.audiomob.AudiomobHostApi.initialize$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,

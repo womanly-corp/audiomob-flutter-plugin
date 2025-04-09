@@ -35,12 +35,14 @@ class AudiomobFlutterPlugin : FlutterPlugin, ActivityAware,
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         audiomobPlugin = AudiomobPlugin(flutterPluginBinding.applicationContext)
         audiomobObserver = AudiomobObserverApiImpl(flutterPluginBinding)
-        audiomobHostApi = AudiomobHostApiImplementation(flutterPluginBinding, audiomobPlugin)
+        audiomobHostApi = AudiomobHostApiImplementation(audiomobPlugin)
+        AudiomobHostApi.setUp(flutterPluginBinding.binaryMessenger, audiomobHostApi)
         audiomobPlugin.setCallbacks(audiomobObserver)
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         audiomobPlugin.release()
+        AudiomobHostApi.setUp(binding.binaryMessenger, null)
     }
 
     //// ActivityAware implementation

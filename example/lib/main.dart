@@ -16,6 +16,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final _audiomobPlugin = Audiomob.instance;
   bool _isInitialized = false;
+  String _isAdAvailable = '';
   @override
   void initState() {
     super.initState();
@@ -25,10 +26,10 @@ class _MyAppState extends State<MyApp> {
         /// use environment variable .env file
         /// or --dart-define=API_KEY=your_api_key to set the api key
         apiKey: const String.fromEnvironment('API_KEY'),
-        bundleId: 'com.example.app',
+        bundleId: const String.fromEnvironment('BUNDLE_ID'),
         isBackgroundModeEnabled: true,
       );
-      _audiomobPlugin.setForceTestAds(true);
+      await _audiomobPlugin.setForceTestAds(true);
       _audiomobPlugin.setListener(SampleListener());
       setState(() => _isInitialized = true);
     });
@@ -45,10 +46,24 @@ class _MyAppState extends State<MyApp> {
           child: _isInitialized
               ? Column(
                   children: [
-                    ElevatedButton(
-                      onPressed: () =>
-                          _audiomobPlugin.getAdAvailability(Placement.rewarded),
-                      child: const Text("getAdAvailability"),
+                    Row(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () async {
+                            final adAvailability = await _audiomobPlugin
+                                .getAdAvailability(Placement.rewarded);
+                            setState(() {
+                              _isAdAvailable =
+                                  'adsAvailable: ${adAvailability.adsAvailable}'
+                                  'estimatedCpm: ${adAvailability.estimatedCpm}'
+                                  'estimatedRevenue: ${adAvailability.estimatedRevenue}'
+                                  'geo: ${adAvailability.geo}';
+                            });
+                          },
+                          child: const Text("getAdAvailability"),
+                        ),
+                        Flexible(child: Text(_isAdAvailable.toString())),
+                      ],
                     ),
                     const SizedBox(height: 12),
                     ElevatedButton(

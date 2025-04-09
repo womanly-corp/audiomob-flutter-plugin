@@ -9,7 +9,7 @@ abstract class AndroidAudiomobPlatform extends PlatformInterface {
   /// Constructs platform interface
   AndroidAudiomobPlatform() : super(token: _token);
   static final _token = Object();
-  static final AndroidAudiomobPlatform _instance = _PlaceholderImplementation();
+  static AndroidAudiomobPlatform _instance = _PlaceholderImplementation();
 
   /// The instance of the AndroidAudiomobPlatform
   static AndroidAudiomobPlatform get instance => _instance;
@@ -19,7 +19,7 @@ abstract class AndroidAudiomobPlatform extends PlatformInterface {
   /// register themselves.
   static set instance(final AndroidAudiomobPlatform instance) {
     PlatformInterface.verify(instance, _token);
-    AndroidAudiomobPlatform.instance = instance;
+    _instance = instance;
   }
 
   final _api = AudiomobHostApi();
@@ -40,7 +40,7 @@ class AndroidAudiomob extends AndroidAudiomobPlatform {
     required final String apiKey,
     required final String bundleId,
     required final bool isBackgroundModeEnabled,
-  }) => _api.initialise(apiKey, bundleId, isBackgroundModeEnabled);
+  }) => _api.initialize(apiKey, bundleId, isBackgroundModeEnabled);
 
   /// Requests a background audio ad and begins the ad playback as soon as it's ready
   Future<void> requestAndPlayAd() => _api.requestAndPlayAd();

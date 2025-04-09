@@ -140,7 +140,7 @@ abstract class AudiomobObserverApi {
 @HostApi()
 abstract class AudiomobHostApi {
   /// Initializes the Audiomob Android SDK
-  void initialise(
+  void initialize(
     final String apiKey,
     final String bundleId,
     final bool backgroundModeEnabled,

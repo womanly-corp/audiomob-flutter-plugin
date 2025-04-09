@@ -12,7 +12,7 @@ import 'audiomob_exceptions.dart';
 class AndroidAudiomobBase {
   bool get isInitialized => _isInitialized;
   var _isInitialized = false;
-  AndroidAudiomob get _androidApi =>
+  AndroidAudiomob get _androidPlatform =>
       AndroidAudiomobPlatform.instance as AndroidAudiomob;
 }
 
@@ -42,12 +42,12 @@ class Audiomob extends AndroidAudiomobBase with AudiomobAvailability {
     if (!Platform.isAndroid) {
       throw UnimplementedError('Audiomob is not implemented on this platform');
     }
-    await _androidApi.init(
+    await _androidPlatform.init(
       apiKey: apiKey,
       bundleId: bundleId,
       isBackgroundModeEnabled: isBackgroundModeEnabled,
     );
-    _androidApi.setObserver(_observer);
+    _androidPlatform.setObserver(_observer);
 
     _isInitialized = true;
   }
@@ -55,7 +55,7 @@ class Audiomob extends AndroidAudiomobBase with AudiomobAvailability {
   /// Disposes the event listener to clean up resources
   Future<void> dispose() async {
     _listener = null;
-    await _androidApi.dispose();
+    await _androidPlatform.dispose();
   }
 }
 
@@ -65,7 +65,7 @@ extension AudiomobAndroidProxyMethods on Audiomob {
     if (!isInitialized) {
       throw const AudiomobNotInitializedException();
     }
-    return _androidApi.requestAndPlayAd();
+    return _androidPlatform.requestAndPlayAd();
   }
 
   /// Pauses the currently playing ad.
@@ -73,7 +73,7 @@ extension AudiomobAndroidProxyMethods on Audiomob {
     if (!isInitialized) {
       throw const AudiomobNotInitializedException();
     }
-    return _androidApi.pauseAd();
+    return _androidPlatform.pauseAd();
   }
 
   /// Resumes playback of a paused ad.
@@ -81,46 +81,46 @@ extension AudiomobAndroidProxyMethods on Audiomob {
     if (!isInitialized) {
       throw const AudiomobNotInitializedException();
     }
-    return _androidApi.resumePausedAd();
+    return _androidPlatform.resumePausedAd();
   }
 
   /// Returns true if the ad playback is in progress
-  Future<bool> get hasAdBegunPlaying => _androidApi.hasAdBegunPlaying;
+  Future<bool> get hasAdBegunPlaying => _androidPlatform.hasAdBegunPlaying;
 
   /// Return true if the ad is paused
-  Future<bool> get isAdPaused => _androidApi.isAdPaused;
+  Future<bool> get isAdPaused => _androidPlatform.isAdPaused;
 
   /// Returns the seconds remaining for the ad that is currently playing
-  Future<double> get timeRemaining => _androidApi.timeRemaining;
+  Future<double> get timeRemaining => _androidPlatform.timeRemaining;
 
   /// If set as true, the server will return test ads even if live ads are enabled on the dashboard
   Future<void> setForceTestAds(final bool enabled) =>
-      _androidApi.setForceTestAds(enabled);
+      _androidPlatform.setForceTestAds(enabled);
 
   /// Sets whether or not to send the user's location with the ad request
   Future<void> setSendGeoLocation(final bool enabled) =>
-      _androidApi.setSendGeoLocation(enabled);
+      _androidPlatform.setSendGeoLocation(enabled);
 
   /// Sets whether or not to send the user's Android Advertising Id with the ad request if it's available
   Future<void> setSendAdvertisingId(final bool enabled) =>
-      _androidApi.setSendAdvertisingId(enabled);
+      _androidPlatform.setSendAdvertisingId(enabled);
 
   /// Sets whether or not to send the Android ID as a fallback ID if the Android Advertising Id is not available
   Future<void> setSendAndroidIdAsAFallback(final bool enabled) =>
-      _androidApi.setSendAndroidIdAsAFallback(enabled);
+      _androidPlatform.setSendAndroidIdAsAFallback(enabled);
 
   /// Sets whether or not to not send any device ID in the ad request if the Android Advertising Id is not available
   Future<void> setDoNotSendAnyDeviceIdsForNonConsentedUsers(
     final bool enabled,
-  ) => _androidApi.setDoNotSendAnyDeviceIdsForNonConsentedUsers(enabled);
+  ) => _androidPlatform.setDoNotSendAnyDeviceIdsForNonConsentedUsers(enabled);
 
   /// Sets whether or not to send consent strings set by a Consent Management Platform or in SharedPreferences
   Future<void> setSendConsentStrings(final bool enabled) =>
-      _androidApi.setSendConsentStrings(enabled);
+      _androidPlatform.setSendConsentStrings(enabled);
 
   /// Sets whether or not to only send contextual signals in the ad request
   Future<void> setOnlySendContextualSignals(final bool enabled) =>
-      _androidApi.setOnlySendContextualSignals(enabled);
+      _androidPlatform.setOnlySendContextualSignals(enabled);
 }
 
 mixin AudiomobAvailability on AndroidAudiomobBase {
@@ -136,7 +136,7 @@ mixin AudiomobAvailability on AndroidAudiomobBase {
 
     final completer = _availabilityCompleter ??= Completer<AdAvailability>();
 
-    await _androidApi.getAdAvailability(placement);
+    await _androidPlatform.getAdAvailability(placement);
     return completer.future;
   }
 

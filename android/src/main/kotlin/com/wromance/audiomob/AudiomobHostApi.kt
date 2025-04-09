@@ -6,11 +6,9 @@ import com.audiomob.sdk.enums.Placement as SdkPlacement
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 
 class AudiomobHostApiImplementation(
-    private val binding: FlutterPlugin.FlutterPluginBinding,
     private val audiomobPlugin: AudiomobPlugin
 ) : AudiomobHostApi {
-
-    override fun initialise(
+    override fun initialize(
         apiKey: String,
         bundleId: String,
         backgroundModeEnabled: Boolean,

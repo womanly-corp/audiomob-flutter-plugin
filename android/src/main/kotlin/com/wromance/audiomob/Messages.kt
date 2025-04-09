@@ -473,7 +473,7 @@ class AudiomobObserverApi(private val binaryMessenger: BinaryMessenger, private 
  */
 interface AudiomobHostApi {
   /** Initializes the Audiomob Android SDK */
-  fun initialise(apiKey: String, bundleId: String, backgroundModeEnabled: Boolean)
+  fun initialize(apiKey: String, bundleId: String, backgroundModeEnabled: Boolean)
   /** Requests a background audio ad and begins the ad playback as soon as it's ready */
   fun requestAndPlayAd()
   /** Pauses the SDK's lifecycle, call this method when the app goes into the background (non-background ads only) */
@@ -521,7 +521,7 @@ interface AudiomobHostApi {
     fun setUp(binaryMessenger: BinaryMessenger, api: AudiomobHostApi?, messageChannelSuffix: String = "") {
       val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audiomob.AudiomobHostApi.initialise$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audiomob.AudiomobHostApi.initialize$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -529,7 +529,7 @@ interface AudiomobHostApi {
             val bundleIdArg = args[1] as String
             val backgroundModeEnabledArg = args[2] as Boolean
             val wrapped: List<Any?> = try {
-              api.initialise(apiKeyArg, bundleIdArg, backgroundModeEnabledArg)
+              api.initialize(apiKeyArg, bundleIdArg, backgroundModeEnabledArg)
               listOf(null)
             } catch (exception: Throwable) {
               wrapError(exception)
