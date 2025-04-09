@@ -1,19 +1,46 @@
 // ignore_for_file: avoid_positional_boolean_parameters
 
+import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+
 import 'messages.g.dart';
 
-/// Android implementation of the Audiomob SDK
-class AndroidAudiomob {
+/// Platform interface for the Audiomob SDK
+abstract class AndroidAudiomobPlatform extends PlatformInterface {
+  /// Constructs platform interface
+  AndroidAudiomobPlatform() : super(token: _token);
+  static final _token = Object();
+  static final AndroidAudiomobPlatform _instance = _PlaceholderImplementation();
+
+  /// The instance of the AndroidAudiomobPlatform
+  static AndroidAudiomobPlatform get instance => _instance;
+
+  /// Platform-specific plugins should override this with their own
+  /// platform-specific class that extends [VideoPlayerPlatform] when they
+  /// register themselves.
+  static set instance(final AndroidAudiomobPlatform instance) {
+    PlatformInterface.verify(instance, _token);
+    AndroidAudiomobPlatform.instance = instance;
+  }
+
   final _api = AudiomobHostApi();
+}
+
+class _PlaceholderImplementation extends AndroidAudiomobPlatform {}
+
+/// Android implementation of the Audiomob SDK
+class AndroidAudiomob extends AndroidAudiomobPlatform {
+  AndroidAudiomob._() : super();
+
+  /// Registers this class as the default instance of [AndroidAudiomob].
+  static void registerWith() =>
+      AndroidAudiomobPlatform.instance = AndroidAudiomob._();
 
   /// Initializes the Audiomob Android SDK
   Future<void> init({
     required final String apiKey,
     required final String bundleId,
     required final bool isBackgroundModeEnabled,
-  }) async {
-    await _api.initialise(apiKey, bundleId, isBackgroundModeEnabled);
-  }
+  }) => _api.initialise(apiKey, bundleId, isBackgroundModeEnabled);
 
   /// Requests a background audio ad and begins the ad playback as soon as it's ready
   Future<void> requestAndPlayAd() => _api.requestAndPlayAd();

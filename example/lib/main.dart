@@ -2,6 +2,7 @@ import 'package:audiomob/audiomob.dart';
 import 'package:flutter/material.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -21,10 +22,13 @@ class _MyAppState extends State<MyApp> {
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await _audiomobPlugin.init(
-        apiKey: 'YOUR_API_KEY',
+        /// use environment variable .env file
+        /// or --dart-define=API_KEY=your_api_key to set the api key
+        apiKey: const String.fromEnvironment('API_KEY'),
         bundleId: 'com.example.app',
         isBackgroundModeEnabled: true,
       );
+      _audiomobPlugin.setForceTestAds(true);
       _audiomobPlugin.setListener(SampleListener());
       setState(() => _isInitialized = true);
     });

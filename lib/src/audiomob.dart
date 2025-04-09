@@ -7,14 +7,17 @@ import 'android/android_audiomob.dart';
 import 'audiomob_event_listener.dart';
 import 'audiomob_exceptions.dart';
 
-class AudiomobBase {
+/// Since there is different API's for iOS and Android, this class purpose
+/// only for Android.
+class AndroidAudiomobBase {
   bool get isInitialized => _isInitialized;
   var _isInitialized = false;
-  final _androidApi = AndroidAudiomob();
+  AndroidAudiomob get _androidApi =>
+      AndroidAudiomobPlatform.instance as AndroidAudiomob;
 }
 
 /// Manages event listening and interaction with the Audiomob plugin.
-class Audiomob extends AudiomobBase with AudiomobAvailability {
+class Audiomob extends AndroidAudiomobBase with AudiomobAvailability {
   Audiomob._();
 
   /// there should be only one instance of Audiomob
@@ -56,7 +59,7 @@ class Audiomob extends AudiomobBase with AudiomobAvailability {
   }
 }
 
-extension AudiomobAndroidProxiMethods on Audiomob {
+extension AudiomobAndroidProxyMethods on Audiomob {
   /// Requests and plays an ad through the Audiomob plugin.
   Future<void> requestAndPlay() {
     if (!isInitialized) {
@@ -120,7 +123,7 @@ extension AudiomobAndroidProxiMethods on Audiomob {
       _androidApi.setOnlySendContextualSignals(enabled);
 }
 
-mixin AudiomobAvailability on AudiomobBase {
+mixin AudiomobAvailability on AndroidAudiomobBase {
   Completer<AdAvailability>? _availabilityCompleter;
 
   /// Gets the ad availability for a given placement.
