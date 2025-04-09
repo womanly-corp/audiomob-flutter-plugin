@@ -1,12 +1,23 @@
 import 'android/messages.g.dart' as messages;
 
+/// Results of an audio ad request
 enum AdRequestResult {
+  /// The audio ad request completed as an audio ad is ready to play
   finished,
+
+  /// There was no ad found for this user
   noAdAvailable,
+
+  /// The user has reached the maximum number of ads for this session
   frequencyCapReached,
+
+  /// The audio ad request failed due to an error
   failed,
+
+  /// The skippble ad was not requested as the device volume is not audible
   skippableRequestVolumeNotAudible;
 
+  /// Creates an [AdRequestResult] from a message
   factory AdRequestResult.fromMessage(
     final messages.AdRequestResult result,
   ) => switch (result) {
@@ -19,6 +30,7 @@ enum AdRequestResult {
       AdRequestResult.skippableRequestVolumeNotAudible,
   };
 
+  /// Converts this [AdRequestResult] to a message
   messages.AdRequestResult toMessage() => switch (this) {
     AdRequestResult.finished => messages.AdRequestResult.FINISHED,
     AdRequestResult.noAdAvailable => messages.AdRequestResult.NO_AD_AVAILABLE,
@@ -30,13 +42,24 @@ enum AdRequestResult {
   };
 }
 
+/// Results of an audio ad playback
 enum AdPlaybackResult {
+  /// The audio ad playback has finished (the user can now be given a reward)
   finished,
+
+  /// The audio ad was stopped by the 'stopAd' function
   stopped,
+
+  /// The audio ad playback was skipped by the user
   skipped,
+
+  /// The audio ad playback failed due to an error
   failed,
+
+  /// The ad was canceled by the user before it started
   canceled;
 
+  /// Creates an [AdPlaybackResult] from a message
   factory AdPlaybackResult.fromMessage(
     final messages.AdPlaybackResult result,
   ) => switch (result) {
@@ -47,6 +70,7 @@ enum AdPlaybackResult {
     messages.AdPlaybackResult.CANCELED => AdPlaybackResult.canceled,
   };
 
+  /// Converts this [AdPlaybackResult] to a message
   messages.AdPlaybackResult toMessage() => switch (this) {
     AdPlaybackResult.finished => messages.AdPlaybackResult.FINISHED,
     AdPlaybackResult.stopped => messages.AdPlaybackResult.STOPPED,
@@ -56,11 +80,18 @@ enum AdPlaybackResult {
   };
 }
 
+/// Reasons why an audio ad playback was paused
 enum AdPauseReason {
+  /// Device volume is below the required threshold
   phoneVolumeLowered,
+
+  /// User has paused the ad playback
   pauseMethodCalled,
+
+  /// App is in the background
   appInBackground;
 
+  /// Creates an [AdPauseReason] from a message
   factory AdPauseReason.fromMessage(
     final messages.AdPauseReason message,
   ) => switch (message) {
@@ -70,6 +101,7 @@ enum AdPauseReason {
     messages.AdPauseReason.APP_IN_BACKGROUND => AdPauseReason.appInBackground,
   };
 
+  /// Converts this [AdPauseReason] to a message
   messages.AdPauseReason toMessage() => switch (this) {
     AdPauseReason.phoneVolumeLowered => messages.AdPauseReason.PHONE_VOLUME_LOW,
     AdPauseReason.pauseMethodCalled =>
@@ -78,14 +110,18 @@ enum AdPauseReason {
   };
 }
 
+/// Ad placement types
 enum Placement {
+  /// Rewarded ad placement
   rewarded;
 
+  /// Creates a [Placement] from a message
   factory Placement.fromMessage(final messages.Placement placement) =>
       switch (placement) {
         messages.Placement.REWARDED => Placement.rewarded,
       };
 
+  /// Converts this [Placement] to a message
   messages.Placement toMessage() => switch (this) {
     Placement.rewarded => messages.Placement.REWARDED,
   };

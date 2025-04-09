@@ -13,7 +13,22 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _audiomobPlugin = Audiomob.instance..setListener(SampleListener());
+  final _audiomobPlugin = Audiomob.instance;
+  bool _isInitialized = false;
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await _audiomobPlugin.init(
+        apiKey: 'YOUR_API_KEY',
+        bundleId: 'com.example.app',
+        isBackgroundModeEnabled: true,
+      );
+      _audiomobPlugin.setListener(SampleListener());
+      setState(() => _isInitialized = true);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,31 +38,33 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Column(
-            children: [
-              ElevatedButton(
-                onPressed: () =>
-                    _audiomobPlugin.getAdAvailability(Placement.rewarded),
-                child: const Text("getAdAvailability"),
-              ),
-              const SizedBox(height: 12),
-              ElevatedButton(
-                onPressed: () => _audiomobPlugin.requestAndPlay(),
-                child: const Text("request and play"),
-              ),
-              const SizedBox(height: 12),
-              ElevatedButton(
-                onPressed: () => _audiomobPlugin.pause(),
-                child: const Text("pause"),
-              ),
-              const SizedBox(height: 12),
-              ElevatedButton(
-                onPressed: () => _audiomobPlugin.resume(),
-                child: const Text("resume"),
-              ),
-              const SizedBox(height: 12),
-            ],
-          ),
+          child: _isInitialized
+              ? Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () =>
+                          _audiomobPlugin.getAdAvailability(Placement.rewarded),
+                      child: const Text("getAdAvailability"),
+                    ),
+                    const SizedBox(height: 12),
+                    ElevatedButton(
+                      onPressed: () => _audiomobPlugin.requestAndPlay(),
+                      child: const Text("request and play"),
+                    ),
+                    const SizedBox(height: 12),
+                    ElevatedButton(
+                      onPressed: () => _audiomobPlugin.pause(),
+                      child: const Text("pause"),
+                    ),
+                    const SizedBox(height: 12),
+                    ElevatedButton(
+                      onPressed: () => _audiomobPlugin.resume(),
+                      child: const Text("resume"),
+                    ),
+                    const SizedBox(height: 12),
+                  ],
+                )
+              : const Text('Initializing...'),
         ),
       ),
     );
@@ -55,11 +72,6 @@ class _MyAppState extends State<MyApp> {
 }
 
 class SampleListener extends AudiomobEventListener {
-  @override
-  void onAdAvailabilityRetrieved(AdAvailability result) {
-    print('onAdAvailabilityRetrieved: result = $result');
-  }
-
   @override
   void onAdRequestStarted() {
     print('onAdRequestStarted');
@@ -71,7 +83,7 @@ class SampleListener extends AudiomobEventListener {
   }
 
   @override
-  void onAdPlaybackPaused(PauseAdEnum pauseReason) {
+  void onAdPlaybackPaused(AdPauseReason pauseReason) {
     print('onAdPlaybackPaused: pauseReason = $pauseReason');
   }
 
