@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_positional_boolean_parameters
+
 import 'dart:async';
 import 'dart:io';
 
@@ -5,7 +7,6 @@ import 'android/android_audiomob.dart';
 import 'android/messages.g.dart' as android_messages;
 import 'audiomob_event_listener.dart';
 import 'audiomob_exceptions.dart';
-import 'audiomob_method_channel.dart';
 import 'enums.dart';
 import 'models.dart';
 
@@ -21,10 +22,9 @@ class Audiomob extends AudiomobBase with AudiomobAvailability {
 
   /// there should be only one instance of Audiomob
   static final instance = Audiomob._();
-  late final _observer = AudiomobAndroidObserver(audiomob: this);
+  late final _observer = _AudiomobAndroidObserver(audiomob: this);
 
   AudiomobEventListener? _listener;
-  StreamSubscription? _eventChannelListener;
 
   /// Sets the event listener for handling Audiomob events
   void setListener(final AudiomobEventListener? listener) {
@@ -55,10 +55,11 @@ class Audiomob extends AudiomobBase with AudiomobAvailability {
   /// Disposes the event listener to clean up resources
   Future<void> dispose() async {
     _listener = null;
-    await _eventChannelListener?.cancel();
-    _eventChannelListener = null;
+    await _androidApi.dispose();
   }
+}
 
+extension AudiomobAndroidProxiMethods on Audiomob {
   /// Requests and plays an ad through the Audiomob plugin.
   Future<void> requestAndPlay() {
     if (!isInitialized) {
@@ -80,12 +81,53 @@ class Audiomob extends AudiomobBase with AudiomobAvailability {
     if (!isInitialized) {
       throw const AudiomobNotInitializedException();
     }
-    return MethodChannelAudiomob.instance.resume();
+    return _androidApi.resumePausedAd();
   }
+
+  /// Returns true if the ad playback is in progress
+  Future<bool> get hasAdBegunPlaying => _androidApi.hasAdBegunPlaying;
+
+  /// Return true if the ad is paused
+  Future<bool> get isAdPaused => _androidApi.isAdPaused;
+
+  /// Returns the seconds remaining for the ad that is currently playing
+  Future<double> get timeRemaining => _androidApi.timeRemaining;
+
+  /// If set as true, the server will return test ads even if live ads are enabled on the dashboard
+  Future<void> setForceTestAds(final bool enabled) =>
+      _androidApi.setForceTestAds(enabled);
+
+  /// Sets whether or not to send the user's location with the ad request
+  Future<void> setSendGeoLocation(final bool enabled) =>
+      _androidApi.setSendGeoLocation(enabled);
+
+  /// Sets whether or not to send the user's Android Advertising Id with the ad request if it's available
+  Future<void> setSendAdvertisingId(final bool enabled) =>
+      _androidApi.setSendAdvertisingId(enabled);
+
+  /// Sets whether or not to send the Android ID as a fallback ID if the Android Advertising Id is not available
+  Future<void> setSendAndroidIdAsAFallback(final bool enabled) =>
+      _androidApi.setSendAndroidIdAsAFallback(enabled);
+
+  /// Sets whether or not to not send any device ID in the ad request if the Android Advertising Id is not available
+  Future<void> setDoNotSendAnyDeviceIdsForNonConsentedUsers(
+    final bool enabled,
+  ) => _androidApi.setDoNotSendAnyDeviceIdsForNonConsentedUsers(enabled);
+
+  /// Sets whether or not to send consent strings set by a Consent Management Platform or in SharedPreferences
+  Future<void> setSendConsentStrings(final bool enabled) =>
+      _androidApi.setSendConsentStrings(enabled);
+
+  /// Sets whether or not to only send contextual signals in the ad request
+  Future<void> setOnlySendContextualSignals(final bool enabled) =>
+      _androidApi.setOnlySendContextualSignals(enabled);
 }
 
 mixin AudiomobAvailability on AudiomobBase {
   Completer<AdAvailability>? _availabilityCompleter;
+
+  /// Gets the ad availability for a given placement.
+  /// For background mode ads, always pass [Placement.rewarded]
   Future<AdAvailability> getAdAvailability(final Placement placement) async {
     if (!isInitialized) {
       throw const AudiomobNotInitializedException();
@@ -107,8 +149,12 @@ mixin AudiomobAvailability on AudiomobBase {
   }
 }
 
-class AudiomobAndroidObserver implements android_messages.AudiomobObserverApi {
-  AudiomobAndroidObserver({required this.audiomob});
+/// Handler for Android Audiomob events
+///
+/// Passes events to the [Audiomob] listener which can be attached
+/// to the [Audiomob] instance
+class _AudiomobAndroidObserver implements android_messages.AudiomobObserverApi {
+  _AudiomobAndroidObserver({required this.audiomob});
   final Audiomob audiomob;
   AudiomobEventListener? get _listener => audiomob._listener;
 
