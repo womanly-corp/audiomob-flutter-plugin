@@ -8,42 +8,90 @@ import com.audiomob.sdk.enums.PauseAdEnum
 import com.audiomob.sdk.interfaces.managers.IAudiomobCallback
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import com.wromance.audiomob.AdAvailability as PluginAdAvailability
+import com.wromance.audiomob.AdPauseReason as PluginAdPauseReason
+import com.wromance.audiomob.AdPlaybackResult as PluginAdPlaybackResult
+import com.wromance.audiomob.AdRequestResult as PluginAdRequestResult
+import com.wromance.audiomob.AudioAd as PluginAudioAd
 
 class AudiomobObserverApiImpl(binding: FlutterPlugin.FlutterPluginBinding) : IAudiomobCallback {
-    var observerApi: AudiomobObserverApi? = null
+    private var observerApi: AudiomobObserverApi? = null
 
     init {
         observerApi = AudiomobObserverApi(binding.binaryMessenger)
     }
 
     override fun onAdAvailabilityRetrieved(result: AdAvailability) {
-        observerApi!!.onAdAvailabilityRetrieved(PluginAdAvailability.fromList());
+        val pluginAdAvailability = PluginAdAvailability(
+            adsAvailable = result.adsAvailable == true,
+            estimatedRevenue = result.estimatedRevenue?.toDouble() ?: 0.0,
+            estimatedCpm = result.estimatedCpm?.toDouble() ?: 0.0,
+            geo = result.geo ?: ""
+        )
+        observerApi?.onAdAvailabilityRetrieved(pluginAdAvailability) { /* Handle callback result if needed */ }
     }
 
     override fun onAdPlaybackCompleted(adPlaybackResult: AdPlaybackResult) {
-        TODO("Not yet implemented")
+        val pluginResult = when (adPlaybackResult) {
+            AdPlaybackResult.FINISHED -> PluginAdPlaybackResult.FINISHED
+            AdPlaybackResult.STOPPED -> PluginAdPlaybackResult.STOPPED
+            AdPlaybackResult.FAILED -> PluginAdPlaybackResult.FAILED
+            AdPlaybackResult.CANCELED -> PluginAdPlaybackResult.CANCELED
+            AdPlaybackResult.SKIPPED -> PluginAdPlaybackResult.SKIPPED
+        }
+        observerApi?.onAdPlaybackCompleted(pluginResult) { /* Handle callback result if needed */ }
     }
 
     override fun onAdPlaybackPaused(pauseReason: PauseAdEnum) {
-        TODO("Not yet implemented")
+        val pluginPauseReason = when (pauseReason) {
+            PauseAdEnum.PhoneVolumeLowered -> PluginAdPauseReason.PHONE_VOLUME_LOWERED
+            PauseAdEnum.PauseMethodCalled -> PluginAdPauseReason.PAUSE_METHOD_CALLED
+            PauseAdEnum.AppInBackground -> PluginAdPauseReason.APP_IN_BACKGROUND
+        }
+        observerApi?.onAdPlaybackPaused(pluginPauseReason) { /* Handle callback result if needed */ }
     }
 
     override fun onAdPlaybackResumed() {
-        TODO("Not yet implemented")
+        observerApi?.onAdPlaybackResumed() { /* Handle callback result if needed */ }
     }
 
     override fun onAdPlaybackStarted(audioAd: AudioAd) {
-        TODO("Not yet implemented")
+        val pluginAudioAd = PluginAudioAd(
+            id = audioAd.id,
+            estimatedCpm = audioAd.estimatedCpm.toDouble(),
+            estimatedRevenue = audioAd.estimatedRevenue.toDouble(),
+            duration = audioAd.duration.toDouble()
+        )
+        observerApi?.onAdPlaybackStarted(pluginAudioAd) { /* Handle callback result if needed */ }
     }
 
     override fun onAdRequestCompleted(
         adRequestResult: AdRequestResult,
         audioAd: AudioAd?
     ) {
-        TODO("Not yet implemented")
+        val pluginResult = when (adRequestResult) {
+            AdRequestResult.FINISHED -> PluginAdRequestResult.FINISHED
+            AdRequestResult.NO_AD_AVAILABLE -> PluginAdRequestResult.NO_AD_AVAILABLE
+            AdRequestResult.FREQUENCY_CAP_REACHED -> PluginAdRequestResult.FREQUENCY_CAP_REACHED
+            AdRequestResult.FAILED -> PluginAdRequestResult.FAILED
+            AdRequestResult.SKIPPABLE_REQUEST_VOLUME_NOT_AUDIBLE -> 
+                PluginAdRequestResult.SKIPPABLE_REQUEST_VOLUME_NOT_AUDIBLE
+
+            AdRequestResult.UNKNOWN -> PluginAdRequestResult.UNKNOWN
+        }
+        
+        val pluginAudioAd = audioAd?.let {
+            PluginAudioAd(
+                id = it.id,
+                estimatedCpm = it.estimatedCpm.toDouble(),
+                estimatedRevenue = it.estimatedRevenue.toDouble(),
+                duration = it.duration.toDouble()
+            )
+        }
+        
+        observerApi?.onAdRequestCompleted(pluginResult, pluginAudioAd) { /* Handle callback result if needed */ }
     }
 
     override fun onAdRequestStarted() {
-        TODO("Not yet implemented")
+        observerApi?.onAdRequestStarted() { /* Handle callback result if needed */ }
     }
 }

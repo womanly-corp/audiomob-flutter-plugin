@@ -4,11 +4,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'android/android_audiomob.dart';
-import 'android/messages.g.dart' as android_messages;
 import 'audiomob_event_listener.dart';
 import 'audiomob_exceptions.dart';
-import 'enums.dart';
-import 'models.dart';
 
 class AudiomobBase {
   bool get isInitialized => _isInitialized;
@@ -132,11 +129,11 @@ mixin AudiomobAvailability on AudiomobBase {
     if (!isInitialized) {
       throw const AudiomobNotInitializedException();
     }
-    _completeAvailability(const AdAvailability());
+    _completeAvailability(AdAvailability());
 
     final completer = _availabilityCompleter ??= Completer<AdAvailability>();
 
-    await _androidApi.getAdAvailability(placement.toMessage());
+    await _androidApi.getAdAvailability(placement);
     return completer.future;
   }
 
@@ -153,7 +150,7 @@ mixin AudiomobAvailability on AudiomobBase {
 ///
 /// Passes events to the [Audiomob] listener which can be attached
 /// to the [Audiomob] instance
-class _AudiomobAndroidObserver implements android_messages.AudiomobObserverApi {
+class _AudiomobAndroidObserver implements AudiomobObserverApi {
   _AudiomobAndroidObserver({required this.audiomob});
   final Audiomob audiomob;
   AudiomobEventListener? get _listener => audiomob._listener;
@@ -163,32 +160,25 @@ class _AudiomobAndroidObserver implements android_messages.AudiomobObserverApi {
 
   @override
   void onAdRequestCompleted(
-    final android_messages.AdRequestResult adRequestResult,
+    final AdRequestResult adRequestResult,
     final AudioAd? result,
-  ) => _listener?.onAdRequestCompleted(
-    AdRequestResult.fromMessage(adRequestResult),
-    result,
-  );
+  ) => _listener?.onAdRequestCompleted(adRequestResult, result);
 
   @override
   void onAdPlaybackStarted(final AudioAd audioAd) =>
       _listener?.onAdPlaybackStarted(audioAd);
 
   @override
-  void onAdPlaybackCompleted(
-    final android_messages.AdPlaybackResult adPlaybackResult,
-  ) => _listener?.onAdPlaybackCompleted(
-    AdPlaybackResult.fromMessage(adPlaybackResult),
-  );
+  void onAdPlaybackCompleted(final AdPlaybackResult adPlaybackResult) =>
+      _listener?.onAdPlaybackCompleted(adPlaybackResult);
 
   @override
-  void onAdAvailabilityRetrieved(
-    final android_messages.AdAvailability result,
-  ) => audiomob._completeAvailability(AdAvailability.fromMessage(result));
+  void onAdAvailabilityRetrieved(final AdAvailability result) =>
+      audiomob._completeAvailability(result);
 
   @override
-  void onAdPlaybackPaused(final android_messages.AdPauseReason adPauseReason) =>
-      _listener?.onAdPlaybackPaused(AdPauseReason.fromMessage(adPauseReason));
+  void onAdPlaybackPaused(final AdPauseReason adPauseReason) =>
+      _listener?.onAdPlaybackPaused(adPauseReason);
 
   @override
   void onAdPlaybackResumed() => _listener?.onAdPlaybackResumed();

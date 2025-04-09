@@ -93,7 +93,9 @@ enum class AdRequestResult(val raw: Int) {
   /** The audio ad request failed due to an error */
   FAILED(3),
   /** The skippble ad was not requested as the device volume is not audible */
-  SKIPPABLE_REQUEST_VOLUME_NOT_AUDIBLE(4);
+  SKIPPABLE_REQUEST_VOLUME_NOT_AUDIBLE(4),
+  /** Unknown result */
+  UNKNOWN(5);
 
   companion object {
     fun ofRaw(raw: Int): AdRequestResult? {
@@ -104,7 +106,7 @@ enum class AdRequestResult(val raw: Int) {
 
 enum class AdPauseReason(val raw: Int) {
   /** The user has lowered the phone volume */
-  PHONE_VOLUME_LOW(0),
+  PHONE_VOLUME_LOWERED(0),
   /** The user has called the pause method */
   PAUSE_METHOD_CALLED(1),
   /** The app is in the background */
@@ -149,7 +151,9 @@ enum class Placement(val raw: Int) {
 }
 
 enum class BannerSize(val raw: Int) {
-  MEDIUM_RECTANGLE(0);
+  NO_BANNER(0),
+  MEDIUM_RECTANGLE(1),
+  MOBILE_LEADERBOARD(2);
 
   companion object {
     fun ofRaw(raw: Int): BannerSize? {
@@ -165,21 +169,21 @@ enum class BannerSize(val raw: Int) {
  */
 data class AdAvailability (
   /** An estimation of whether or not you will receive ads in this region */
-  val adsAvailable: Boolean? = null,
+  val adsAvailable: Boolean,
   /** Estimated revenue for an ad (if an impression is detected) */
-  val estimatedRevenue: Double? = null,
+  val estimatedRevenue: Double,
   /** Estimated Cost Per Thousand Impressions for an ad (if an impression is detected) */
-  val estimatedCpm: Double? = null,
+  val estimatedCpm: Double,
   /** The ISO 3166 alpha-2 country code of the region the user is in */
-  val geo: String? = null
+  val geo: String
 )
  {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): AdAvailability {
-      val adsAvailable = pigeonVar_list[0] as Boolean?
-      val estimatedRevenue = pigeonVar_list[1] as Double?
-      val estimatedCpm = pigeonVar_list[2] as Double?
-      val geo = pigeonVar_list[3] as String?
+      val adsAvailable = pigeonVar_list[0] as Boolean
+      val estimatedRevenue = pigeonVar_list[1] as Double
+      val estimatedCpm = pigeonVar_list[2] as Double
+      val geo = pigeonVar_list[3] as String
       return AdAvailability(adsAvailable, estimatedRevenue, estimatedCpm, geo)
     }
   }
@@ -322,7 +326,6 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
     }
   }
 }
-
 
 /**
  * Flutter API Interface for Audiomob callbacks
@@ -470,7 +473,7 @@ class AudiomobObserverApi(private val binaryMessenger: BinaryMessenger, private 
  */
 interface AudiomobHostApi {
   /** Initializes the Audiomob Android SDK */
-  fun initialise(apiKey: String, bundleId: String, backgroundModeEnabled: Boolean?)
+  fun initialise(apiKey: String, bundleId: String, backgroundModeEnabled: Boolean)
   /** Requests a background audio ad and begins the ad playback as soon as it's ready */
   fun requestAndPlayAd()
   /** Pauses the SDK's lifecycle, call this method when the app goes into the background (non-background ads only) */
@@ -494,19 +497,19 @@ interface AudiomobHostApi {
   /** Returns the seconds remaining for the ad that is currently playing */
   fun getTimeRemaining(): Double
   /** If set as true, the server will return test ads even if live ads are enabled on the dashboard */
-  fun setForceTestAds(enabled: Boolean, callback: (Result<Unit>) -> Unit)
+  fun setForceTestAds(enabled: Boolean)
   /** If set as true, and user has given the permission, SDK will fetch latitude and longitude and send in ad request */
-  fun setSendGeoLocation(enabled: Boolean, callback: (Result<Unit>) -> Unit)
+  fun setSendGeoLocation(enabled: Boolean)
   /** Sets whether or not to send the user's Android Advertising Id with the ad request if it's available */
-  fun setSendAdvertisingId(enabled: Boolean, callback: (Result<Unit>) -> Unit)
+  fun setSendAdvertisingId(enabled: Boolean)
   /** Sets whether or not to send the Android ID as a fallback ID if the Android Advertising Id is not available */
-  fun setSendAndroidIdAsAFallback(enabled: Boolean, callback: (Result<Unit>) -> Unit)
+  fun setSendAndroidIdAsAFallback(enabled: Boolean)
   /** Sets whether or not to not send any device ID in the ad request if the Android Advertising Id is not available */
-  fun setDoNotSendAnyDeviceIdsForNonConsentedUsers(enabled: Boolean, callback: (Result<Unit>) -> Unit)
+  fun setDoNotSendAnyDeviceIdsForNonConsentedUsers(enabled: Boolean)
   /** Sets whether or not to send consent strings set by a Consent Management Platform or in SharedPreferences */
-  fun setSendConsentStrings(enabled: Boolean, callback: (Result<Unit>) -> Unit)
+  fun setSendConsentStrings(enabled: Boolean)
   /** Sets whether or not to only send contextual signals in the ad request */
-  fun setOnlySendContextualSignals(enabled: Boolean, callback: (Result<Unit>) -> Unit)
+  fun setOnlySendContextualSignals(enabled: Boolean)
 
   companion object {
     /** The codec used by AudiomobHostApi. */
@@ -524,7 +527,7 @@ interface AudiomobHostApi {
             val args = message as List<Any?>
             val apiKeyArg = args[0] as String
             val bundleIdArg = args[1] as String
-            val backgroundModeEnabledArg = args[2] as Boolean?
+            val backgroundModeEnabledArg = args[2] as Boolean
             val wrapped: List<Any?> = try {
               api.initialise(apiKeyArg, bundleIdArg, backgroundModeEnabledArg)
               listOf(null)
@@ -718,14 +721,13 @@ interface AudiomobHostApi {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val enabledArg = args[0] as Boolean
-            api.setForceTestAds(enabledArg) { result: Result<Unit> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(wrapError(error))
-              } else {
-                reply.reply(wrapResult(null))
-              }
+            val wrapped: List<Any?> = try {
+              api.setForceTestAds(enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
             }
+            reply.reply(wrapped)
           }
         } else {
           channel.setMessageHandler(null)
@@ -737,14 +739,13 @@ interface AudiomobHostApi {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val enabledArg = args[0] as Boolean
-            api.setSendGeoLocation(enabledArg) { result: Result<Unit> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(wrapError(error))
-              } else {
-                reply.reply(wrapResult(null))
-              }
+            val wrapped: List<Any?> = try {
+              api.setSendGeoLocation(enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
             }
+            reply.reply(wrapped)
           }
         } else {
           channel.setMessageHandler(null)
@@ -756,14 +757,13 @@ interface AudiomobHostApi {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val enabledArg = args[0] as Boolean
-            api.setSendAdvertisingId(enabledArg) { result: Result<Unit> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(wrapError(error))
-              } else {
-                reply.reply(wrapResult(null))
-              }
+            val wrapped: List<Any?> = try {
+              api.setSendAdvertisingId(enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
             }
+            reply.reply(wrapped)
           }
         } else {
           channel.setMessageHandler(null)
@@ -775,14 +775,13 @@ interface AudiomobHostApi {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val enabledArg = args[0] as Boolean
-            api.setSendAndroidIdAsAFallback(enabledArg) { result: Result<Unit> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(wrapError(error))
-              } else {
-                reply.reply(wrapResult(null))
-              }
+            val wrapped: List<Any?> = try {
+              api.setSendAndroidIdAsAFallback(enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
             }
+            reply.reply(wrapped)
           }
         } else {
           channel.setMessageHandler(null)
@@ -794,14 +793,13 @@ interface AudiomobHostApi {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val enabledArg = args[0] as Boolean
-            api.setDoNotSendAnyDeviceIdsForNonConsentedUsers(enabledArg) { result: Result<Unit> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(wrapError(error))
-              } else {
-                reply.reply(wrapResult(null))
-              }
+            val wrapped: List<Any?> = try {
+              api.setDoNotSendAnyDeviceIdsForNonConsentedUsers(enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
             }
+            reply.reply(wrapped)
           }
         } else {
           channel.setMessageHandler(null)
@@ -813,14 +811,13 @@ interface AudiomobHostApi {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val enabledArg = args[0] as Boolean
-            api.setSendConsentStrings(enabledArg) { result: Result<Unit> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(wrapError(error))
-              } else {
-                reply.reply(wrapResult(null))
-              }
+            val wrapped: List<Any?> = try {
+              api.setSendConsentStrings(enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
             }
+            reply.reply(wrapped)
           }
         } else {
           channel.setMessageHandler(null)
@@ -832,14 +829,13 @@ interface AudiomobHostApi {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val enabledArg = args[0] as Boolean
-            api.setOnlySendContextualSignals(enabledArg) { result: Result<Unit> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(wrapError(error))
-              } else {
-                reply.reply(wrapResult(null))
-              }
+            val wrapped: List<Any?> = try {
+              api.setOnlySendContextualSignals(enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
             }
+            reply.reply(wrapped)
           }
         } else {
           channel.setMessageHandler(null)

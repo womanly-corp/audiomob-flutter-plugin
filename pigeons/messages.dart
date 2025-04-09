@@ -1,4 +1,4 @@
-// ignore_for_file: constant_identifier_names, avoid_positional_boolean_parameters
+// ignore_for_file: constant_identifier_names, avoid_positional_boolean_parameters, lines_longer_than_80_chars
 
 import 'package:pigeon/pigeon.dart';
 
@@ -13,90 +13,99 @@ import 'package:pigeon/pigeon.dart';
 /// Results of an audio ad request
 enum AdRequestResult {
   /// The audio ad request completed as an audio ad is ready to play
-  FINISHED,
+  finished,
 
   /// There was no ad found for this user
-  NO_AD_AVAILABLE,
+  noAdAvailable,
 
   /// The user has reached the maximum number of ads for this session
-  FREQUENCY_CAP_REACHED,
+  frequencyCapReached,
 
   /// The audio ad request failed due to an error
-  FAILED,
+  failed,
 
   /// The skippble ad was not requested as the device volume is not audible
-  SKIPPABLE_REQUEST_VOLUME_NOT_AUDIBLE,
+  skippableRequestVolumeNotAudible,
+
+  /// Unknown result
+  unknown,
 }
 
 enum AdPauseReason {
   /// The user has lowered the phone volume
-  PHONE_VOLUME_LOW,
+  phoneVolumeLowered,
 
   /// The user has called the pause method
-  PAUSE_METHOD_CALLED,
+  pauseMethodCalled,
 
   /// The app is in the background
-  APP_IN_BACKGROUND,
+  appInBackground,
 }
 
 /// Results of an audio ad playback
 enum AdPlaybackResult {
   /// The audio ad playback has finished (the user can now be given a reward)
-  FINISHED,
+  finished,
 
   /// The audio ad was stopped by the 'stopAd' function
-  STOPPED,
+  stopped,
 
   /// The audio ad playback failed due to an error
-  FAILED,
+  failed,
 
   /// The ad was canceled by the user before it started
-  CANCELED,
+  canceled,
 
   /// The audio ad playback was skipped by the user
-  SKIPPED,
+  skipped,
 }
 
 /// Information about ad availability
 class AdAvailability {
+  const AdAvailability({
+    this.adsAvailable = false,
+    this.estimatedRevenue = 0,
+    this.estimatedCpm = 0,
+    this.geo = '',
+  });
+
   /// An estimation of whether or not you will receive ads in this region
-  bool? adsAvailable;
+  final bool adsAvailable;
 
   /// Estimated revenue for an ad (if an impression is detected)
-  double? estimatedRevenue;
+  final double estimatedRevenue;
 
   /// Estimated Cost Per Thousand Impressions for an ad (if an impression is detected)
-  double? estimatedCpm;
+  final double estimatedCpm;
 
   /// The ISO 3166 alpha-2 country code of the region the user is in
-  String? geo;
+  final String geo;
 }
 
-enum Placement { REWARDED, SKIPPABLE }
+enum Placement { rewarded, skippable }
 
-// TODO: verify that noBanner, mobileLeaderboard exists
-enum BannerSize { MEDIUM_RECTANGLE }
+enum BannerSize { noBanner, mediumRectangle, mobileLeaderboard }
 
 /// Information about an audio ad
 class AudioAd {
-  AudioAd({
-    required this.id,
-    required this.estimatedCpm,
-    required this.estimatedRevenue,
-    required this.duration,
+  const AudioAd({
+    this.id = '',
+    this.estimatedCpm = 0,
+    this.estimatedRevenue = 0,
+    this.duration = 0,
   });
 
   /// The unique id of this audio ad
-  String id;
+  final String id;
 
   /// Estimated Cost Per Thousand Impressions for this ad (if an impression is detected)
-  double estimatedCpm;
+  final double estimatedCpm;
 
   /// Estimated revenue for an ad (if an impression is detected)
-  double estimatedRevenue;
+  final double estimatedRevenue;
 
   /// The duration of the ad
-  double duration;
+  final double duration;
 }
 
 /// Flutter API Interface for Audiomob callbacks
@@ -134,7 +143,7 @@ abstract class AudiomobHostApi {
   void initialise(
     final String apiKey,
     final String bundleId,
-    final bool? backgroundModeEnabled,
+    final bool backgroundModeEnabled,
   );
 
   /// Requests a background audio ad and begins the ad playback as soon as it's ready
@@ -171,30 +180,23 @@ abstract class AudiomobHostApi {
   double getTimeRemaining();
 
   /// If set as true, the server will return test ads even if live ads are enabled on the dashboard
-  @async
   void setForceTestAds(final bool enabled);
 
   /// If set as true, and user has given the permission, SDK will fetch latitude and longitude and send in ad request
-  @async
   void setSendGeoLocation(final bool enabled);
 
   /// Sets whether or not to send the user's Android Advertising Id with the ad request if it's available
-  @async
   void setSendAdvertisingId(final bool enabled);
 
   /// Sets whether or not to send the Android ID as a fallback ID if the Android Advertising Id is not available
-  @async
   void setSendAndroidIdAsAFallback(final bool enabled);
 
   /// Sets whether or not to not send any device ID in the ad request if the Android Advertising Id is not available
-  @async
   void setDoNotSendAnyDeviceIdsForNonConsentedUsers(final bool enabled);
 
   /// Sets whether or not to send consent strings set by a Consent Management Platform or in SharedPreferences
-  @async
   void setSendConsentStrings(final bool enabled);
 
   /// Sets whether or not to only send contextual signals in the ad request
-  @async
   void setOnlySendContextualSignals(final bool enabled);
 }

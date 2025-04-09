@@ -28,12 +28,15 @@ import kotlinx.coroutines.launch
 class AudiomobFlutterPlugin : FlutterPlugin, ActivityAware,
     DefaultLifecycleObserver {
     private lateinit var audiomobPlugin: AudiomobPlugin
+    private lateinit var audiomobObserver: IAudiomobCallback
+    private lateinit var audiomobHostApi: AudiomobHostApi
     private var lifecycle: Lifecycle? = null
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         audiomobPlugin = AudiomobPlugin(flutterPluginBinding.applicationContext)
-
-        audiomobPlugin.setCallbacks(audiomobListener)
+        audiomobObserver = AudiomobObserverApiImpl(flutterPluginBinding)
+        audiomobHostApi = AudiomobHostApiImplementation(flutterPluginBinding, audiomobPlugin)
+        audiomobPlugin.setCallbacks(audiomobObserver)
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -76,22 +79,22 @@ class AudiomobFlutterPlugin : FlutterPlugin, ActivityAware,
 }
 
 
-class AudiomobPluginListener : IAudiomobCallback {
-    var eventSink: EventChannel.EventSink? = null
-    var audioAd: AudioAd? = null
-
-    override fun onAdAvailabilityRetrieved(result: AdAvailability) {
-        // for some reason that event is exceptional: it is called from some not-main thread
-        // please fill issue for that case
-        GlobalScope.launch(Dispatchers.Main) {
-            eventSink?.success(
-                mapOf(
-                    "type" to "onAdAvailabilityRetrieved",
-                    "result" to result.toMap()
-                )
-            )
-        }
-        Log.d("Audiomob", "Ads are available: " + result.toMap())
-    }
-
-}
+//class AudiomobPluginListener : IAudiomobCallback {
+//    var eventSink: EventChannel.EventSink? = null
+//    var audioAd: AudioAd? = null
+//
+//    override fun onAdAvailabilityRetrieved(result: AdAvailability) {
+//        // for some reason that event is exceptional: it is called from some not-main thread
+//        // please fill issue for that case
+//        GlobalScope.launch(Dispatchers.Main) {
+//            eventSink?.success(
+//                mapOf(
+//                    "type" to "onAdAvailabilityRetrieved",
+//                    "result" to result.toMap()
+//                )
+//            )
+//        }
+//        Log.d("Audiomob", "Ads are available: " + result.toMap())
+//    }
+//
+//}

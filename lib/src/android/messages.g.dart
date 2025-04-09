@@ -45,69 +45,73 @@ bool _deepEquals(Object? a, Object? b) {
 /// Results of an audio ad request
 enum AdRequestResult {
   /// The audio ad request completed as an audio ad is ready to play
-  FINISHED,
+  finished,
   /// There was no ad found for this user
-  NO_AD_AVAILABLE,
+  noAdAvailable,
   /// The user has reached the maximum number of ads for this session
-  FREQUENCY_CAP_REACHED,
+  frequencyCapReached,
   /// The audio ad request failed due to an error
-  FAILED,
+  failed,
   /// The skippble ad was not requested as the device volume is not audible
-  SKIPPABLE_REQUEST_VOLUME_NOT_AUDIBLE,
+  skippableRequestVolumeNotAudible,
+  /// Unknown result
+  unknown,
 }
 
 enum AdPauseReason {
   /// The user has lowered the phone volume
-  PHONE_VOLUME_LOW,
+  phoneVolumeLowered,
   /// The user has called the pause method
-  PAUSE_METHOD_CALLED,
+  pauseMethodCalled,
   /// The app is in the background
-  APP_IN_BACKGROUND,
+  appInBackground,
 }
 
 /// Results of an audio ad playback
 enum AdPlaybackResult {
   /// The audio ad playback has finished (the user can now be given a reward)
-  FINISHED,
+  finished,
   /// The audio ad was stopped by the 'stopAd' function
-  STOPPED,
+  stopped,
   /// The audio ad playback failed due to an error
-  FAILED,
+  failed,
   /// The ad was canceled by the user before it started
-  CANCELED,
+  canceled,
   /// The audio ad playback was skipped by the user
-  SKIPPED,
+  skipped,
 }
 
 enum Placement {
-  REWARDED,
-  SKIPPABLE,
+  rewarded,
+  skippable,
 }
 
 enum BannerSize {
-  MEDIUM_RECTANGLE,
+  noBanner,
+  mediumRectangle,
+  mobileLeaderboard,
 }
 
 /// Information about ad availability
 class AdAvailability {
   AdAvailability({
-    this.adsAvailable,
-    this.estimatedRevenue,
-    this.estimatedCpm,
-    this.geo,
+    this.adsAvailable = false,
+    this.estimatedRevenue = 0,
+    this.estimatedCpm = 0,
+    this.geo = '',
   });
 
   /// An estimation of whether or not you will receive ads in this region
-  bool? adsAvailable;
+  bool adsAvailable;
 
   /// Estimated revenue for an ad (if an impression is detected)
-  double? estimatedRevenue;
+  double estimatedRevenue;
 
   /// Estimated Cost Per Thousand Impressions for an ad (if an impression is detected)
-  double? estimatedCpm;
+  double estimatedCpm;
 
   /// The ISO 3166 alpha-2 country code of the region the user is in
-  String? geo;
+  String geo;
 
   List<Object?> _toList() {
     return <Object?>[
@@ -124,10 +128,10 @@ class AdAvailability {
   static AdAvailability decode(Object result) {
     result as List<Object?>;
     return AdAvailability(
-      adsAvailable: result[0] as bool?,
-      estimatedRevenue: result[1] as double?,
-      estimatedCpm: result[2] as double?,
-      geo: result[3] as String?,
+      adsAvailable: result[0]! as bool,
+      estimatedRevenue: result[1]! as double,
+      estimatedCpm: result[2]! as double,
+      geo: result[3]! as String,
     );
   }
 
@@ -152,10 +156,10 @@ class AdAvailability {
 /// Information about an audio ad
 class AudioAd {
   AudioAd({
-    required this.id,
-    required this.estimatedCpm,
-    required this.estimatedRevenue,
-    required this.duration,
+    this.id = '',
+    this.estimatedCpm = 0,
+    this.estimatedRevenue = 0,
+    this.duration = 0,
   });
 
   /// The unique id of this audio ad
@@ -481,7 +485,7 @@ class AudiomobHostApi {
   final String pigeonVar_messageChannelSuffix;
 
   /// Initializes the Audiomob Android SDK
-  Future<void> initialise(String apiKey, String bundleId, bool? backgroundModeEnabled) async {
+  Future<void> initialise(String apiKey, String bundleId, bool backgroundModeEnabled) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.audiomob.AudiomobHostApi.initialise$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,

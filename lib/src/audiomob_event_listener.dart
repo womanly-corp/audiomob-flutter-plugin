@@ -1,7 +1,6 @@
-import 'android/messages.g.dart' as messages;
-import 'enums.dart';
+import 'android/messages.g.dart';
 
-export 'android/messages.g.dart' show AudioAd;
+export 'android/messages.g.dart';
 
 /// Listener for Audiomob SDK events
 class AudiomobEventListener {
@@ -35,11 +34,11 @@ class AudiomobEventListener {
   /// The audio ad playback has started
   ///
   /// Playback of the ad has begun, use the callback to pause your app's audio.
-  void onAdPlaybackStarted(final messages.AudioAd audioAd) {}
+  void onAdPlaybackStarted(final AudioAd audioAd) {}
 
   /// The audio ad request completed as an audio ad is ready to play
   void onAdRequestCompleted(
     final AdRequestResult adRequestResult,
-    final messages.AudioAd? audioAd,
+    final AudioAd? audioAd,
   ) {}
 }
