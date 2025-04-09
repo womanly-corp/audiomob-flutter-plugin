@@ -81,6 +81,7 @@ enum AdPlaybackResult {
 
 enum Placement {
   REWARDED,
+  SKIPPABLE,
 }
 
 enum BannerSize {

@@ -40,13 +40,9 @@ android {
             minifyEnabled true
         }
         debug {
-            minifyEnabled false // Отключить минимизацию для отладочной сборки, если не нужно
+            minifyEnabled false // disabled minification for debug build
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-    }
-
-
-    dependencies {
     }
 }
 

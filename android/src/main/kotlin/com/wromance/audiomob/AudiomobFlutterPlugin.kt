@@ -25,81 +25,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class AudiomobFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
+class AudiomobFlutterPlugin : FlutterPlugin, ActivityAware,
     DefaultLifecycleObserver {
     private lateinit var audiomobPlugin: AudiomobPlugin
-    private lateinit var channel: MethodChannel
-    private lateinit var eventChannel: EventChannel
-    private val audiomobListener = AudiomobPluginListener()
     private var lifecycle: Lifecycle? = null
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-        channel = MethodChannel(flutterPluginBinding.binaryMessenger, "audiomob")
-        channel.setMethodCallHandler(this)
-
-
-        eventChannel = EventChannel(flutterPluginBinding.binaryMessenger, "audiomob/events")
-        eventChannel.setStreamHandler(object : EventChannel.StreamHandler {
-            override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
-                audiomobListener.eventSink = events
-            }
-
-            override fun onCancel(arguments: Any?) {
-                audiomobListener.eventSink = null
-            }
-        })
-
         audiomobPlugin = AudiomobPlugin(flutterPluginBinding.applicationContext)
+
         audiomobPlugin.setCallbacks(audiomobListener)
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        channel.setMethodCallHandler(null)
         audiomobPlugin.release()
-    }
-
-    override fun onMethodCall(call: MethodCall, result: Result) {
-        when (call.method) {
-            "init" -> {
-                val apiKey = call.argument<String>("apiKey") ?: ""
-                val bundleId = call.argument<String>("bundleId") ?: ""
-                val isBackgroundModeEnabled =
-                    call.argument<Boolean>("isBackgroundModeEnabled") ?: false
-
-                audiomobPlugin.initialise(apiKey, bundleId, isBackgroundModeEnabled)
-                result.success(null)
-            }
-
-            "requestAndPlay" -> {
-                audiomobPlugin.requestAndPlayAd()
-                result.success(null)
-            }
-
-            "getAdAvailability" -> {
-                val placement = when (call.argument<String>("placement")) {
-                    "rewarded" -> Placement.REWARDED
-                    else -> Placement.SKIPPABLE
-                }
-                audiomobPlugin.getAdAvailability(placement)
-                result.success(null)
-            }
-
-            "pause" -> {
-                if (audiomobListener.audioAd != null) {
-                    audiomobPlugin.pauseAd()
-                }
-                result.success(null)
-            }
-
-            "resume" -> {
-                if (audiomobListener.audioAd != null) {
-                    audiomobPlugin.resumePausedAd()
-                }
-                result.success(null)
-            }
-
-            else -> result.notImplemented()
-        }
     }
 
     //// ActivityAware implementation
@@ -124,17 +62,19 @@ class AudiomobFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     }
 
     //// Application lifecycle observer
-
     override fun onStop(owner: LifecycleOwner) {
         super.onStop(owner)
+        // TODO: move to dart side
         audiomobPlugin.pauseLifeCycle()
     }
 
     override fun onStart(owner: LifecycleOwner) {
         super.onStart(owner)
+        // TODO: move to dart side
         audiomobPlugin.resumeLifeCycle()
     }
 }
+
 
 class AudiomobPluginListener : IAudiomobCallback {
     var eventSink: EventChannel.EventSink? = null
@@ -154,50 +94,4 @@ class AudiomobPluginListener : IAudiomobCallback {
         Log.d("Audiomob", "Ads are available: " + result.toMap())
     }
 
-    override fun onAdRequestStarted() {
-        eventSink?.success(mapOf("type" to "onAdRequestStarted"))
-        Log.d("Audiomob", "onAdRequestStarted")
-    }
-
-    override fun onAdRequestCompleted(adRequestResult: AdRequestResult, audioAd: AudioAd?) {
-        this.audioAd = audioAd
-        eventSink?.success(
-            mapOf(
-                "type" to "onAdRequestCompleted",
-                "adRequestResult" to adRequestResult.name,
-                "audioAd" to audioAd?.toMap()
-            )
-        )
-        Log.d("Audiomob", "onAdRequestCompleted: $adRequestResult, $audioAd")
-    }
-
-    override fun onAdPlaybackStarted(audioAd: AudioAd) {
-        this.audioAd = audioAd
-        eventSink?.success(mapOf("type" to "onAdPlaybackStarted", "audioAd" to audioAd.toMap()))
-        Log.d("Audiomob", "onAdPlaybackStarted: $audioAd")
-        // Playback of the ad has begun, use the callback to mute your app's sound.
-    }
-
-    override fun onAdPlaybackCompleted(adPlaybackResult: AdPlaybackResult) {
-        this.audioAd = null
-        eventSink?.success(
-            mapOf(
-                "type" to "onAdPlaybackCompleted",
-                "adPlaybackResult" to adPlaybackResult.name
-            )
-        )
-        Log.d("Audiomob", "onAdPlaybackCompleted: $adPlaybackResult")
-    }
-
-    override fun onAdPlaybackPaused(pauseReason: PauseAdEnum) {
-        eventSink?.success(mapOf("type" to "onAdPlaybackPaused", "pauseReason" to pauseReason.name))
-        Log.d("Audiomob", "onAdPlaybackPaused: $pauseReason")
-
-    }
-
-    override fun onAdPlaybackResumed() {
-        eventSink?.success(mapOf("type" to "onAdPlaybackResumed"))
-        Log.d("Audiomob", "onAdPlaybackResumed")
-
-    }
 }

@@ -138,7 +138,8 @@ enum class AdPlaybackResult(val raw: Int) {
 }
 
 enum class Placement(val raw: Int) {
-  REWARDED(0);
+  REWARDED(0),
+  SKIPPABLE(1);
 
   companion object {
     fun ofRaw(raw: Int): Placement? {

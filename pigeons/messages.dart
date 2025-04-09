@@ -72,7 +72,7 @@ class AdAvailability {
   String? geo;
 }
 
-enum Placement { REWARDED }
+enum Placement { REWARDED, SKIPPABLE }
 
 // TODO: verify that noBanner, mobileLeaderboard exists
 enum BannerSize { MEDIUM_RECTANGLE }
@@ -101,7 +101,7 @@ class AudioAd {
 
 /// Flutter API Interface for Audiomob callbacks
 @FlutterApi()
-abstract interface class AudiomobObserverApi {
+abstract class AudiomobObserverApi {
   /// The audio ad request has started
   void onAdRequestStarted();
 
