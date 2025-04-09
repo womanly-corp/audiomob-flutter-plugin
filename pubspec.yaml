@@ -4,8 +4,7 @@ version: 0.0.3
 homepage: https://github.com/womanly-corp/audiomob-flutter-plugin
 
 environment:
-  sdk: ^3.7.0
-  flutter: ">=3.27.0"
+  sdk: ^3.5.0
 
 dependencies:
   flutter:
