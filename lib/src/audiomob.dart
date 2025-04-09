@@ -1,19 +1,30 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'android/android_audiomob.dart';
+import 'android/messages.g.dart' as android_messages;
 import 'audiomob_event_listener.dart';
 import 'audiomob_exceptions.dart';
 import 'audiomob_method_channel.dart';
+import 'enums.dart';
+import 'models.dart';
+
+class AudiomobBase {
+  bool get isInitialized => _isInitialized;
+  var _isInitialized = false;
+  final _androidApi = AndroidAudiomob();
+}
 
 /// Manages event listening and interaction with the Audiomob plugin.
-class Audiomob {
+class Audiomob extends AudiomobBase with AudiomobAvailability {
   Audiomob._();
 
   /// there should be only one instance of Audiomob
   static final instance = Audiomob._();
+  late final _observer = AudiomobAndroidObserver(audiomob: this);
 
   AudiomobEventListener? _listener;
   StreamSubscription? _eventChannelListener;
-  bool get isInitialized => _eventChannelListener != null;
 
   /// Sets the event listener for handling Audiomob events
   void setListener(final AudiomobEventListener? listener) {
@@ -28,42 +39,17 @@ class Audiomob {
   }) async {
     /// If the event channel listener is already initialized, return.
     if (isInitialized) return;
-    _eventChannelListener = MethodChannelAudiomob.instance.eventChannel
-        .receiveBroadcastStream()
-        .listen((final rawData) {
-      final data = (rawData as Map).cast<String, dynamic>();
-      final _ = switch (data['type']) {
-        'onAdAvailabilityRetrieved' => _listener?.onAdAvailabilityRetrieved(
-            AdAvailability.fromMap(
-              (data['result'] as Map).cast<String, dynamic>(),
-            ),
-          ),
-        'onAdRequestStarted' => _listener?.onAdRequestStarted(),
-        'onAdRequestCompleted' => _listener?.onAdRequestCompleted(
-            AdRequestResult.fromName(data['adRequestResult']),
-            AudioAd.fromMap((data['audioAd'] as Map).cast<String, dynamic>()),
-          ),
-        'onAdPlaybackStarted' => _listener?.onAdPlaybackStarted(
-            AudioAd.fromMap((data['audioAd'] as Map).cast<String, dynamic>()),
-          ),
-        'onAdPlaybackCompleted' => _listener?.onAdPlaybackCompleted(
-            AdPlaybackResult.fromName(data['adPlaybackResult']),
-          ),
-        'onAdPlaybackPaused' => _listener?.onAdPlaybackPaused(
-            PauseAdEnum.fromName(data['pauseReason']),
-          ),
-        'onAdPlaybackResumed' => _listener?.onAdPlaybackResumed(),
-        _ => throw Exception('MethodChannelAudiomob: unsupported event')
-      };
-    })
-      ..onDone(() {
-        _eventChannelListener = null;
-      });
-    await MethodChannelAudiomob.instance.init(
+    if (!Platform.isAndroid) {
+      throw UnimplementedError('Audiomob is not implemented on this platform');
+    }
+    await _androidApi.init(
       apiKey: apiKey,
       bundleId: bundleId,
       isBackgroundModeEnabled: isBackgroundModeEnabled,
     );
+    _androidApi.setObserver(_observer);
+
+    _isInitialized = true;
   }
 
   /// Disposes the event listener to clean up resources
@@ -78,7 +64,7 @@ class Audiomob {
     if (!isInitialized) {
       throw const AudiomobNotInitializedException();
     }
-    return MethodChannelAudiomob.instance.requestAndPlay();
+    return _androidApi.requestAndPlayAd();
   }
 
   /// Pauses the currently playing ad.
@@ -86,7 +72,7 @@ class Audiomob {
     if (!isInitialized) {
       throw const AudiomobNotInitializedException();
     }
-    return MethodChannelAudiomob.instance.pause();
+    return _androidApi.pauseAd();
   }
 
   /// Resumes playback of a paused ad.
@@ -96,11 +82,68 @@ class Audiomob {
     }
     return MethodChannelAudiomob.instance.resume();
   }
+}
 
-  Future<void> getAdAvailability(final Placement placement) {
+mixin AudiomobAvailability on AudiomobBase {
+  Completer<AdAvailability>? _availabilityCompleter;
+  Future<AdAvailability> getAdAvailability(final Placement placement) async {
     if (!isInitialized) {
       throw const AudiomobNotInitializedException();
     }
-    return MethodChannelAudiomob.instance.getAdAvailability(placement);
+    _completeAvailability(const AdAvailability());
+
+    final completer = _availabilityCompleter ??= Completer<AdAvailability>();
+
+    await _androidApi.getAdAvailability(placement.toMessage());
+    return completer.future;
   }
+
+  void _completeAvailability(final AdAvailability availability) {
+    final oldCompleter = _availabilityCompleter;
+    _availabilityCompleter = null;
+    if (oldCompleter != null && !oldCompleter.isCompleted) {
+      oldCompleter.complete(availability);
+    }
+  }
+}
+
+class AudiomobAndroidObserver implements android_messages.AudiomobObserverApi {
+  AudiomobAndroidObserver({required this.audiomob});
+  final Audiomob audiomob;
+  AudiomobEventListener? get _listener => audiomob._listener;
+
+  @override
+  void onAdRequestStarted() => _listener?.onAdRequestStarted();
+
+  @override
+  void onAdRequestCompleted(
+    final android_messages.AdRequestResult adRequestResult,
+    final AudioAd? result,
+  ) => _listener?.onAdRequestCompleted(
+    AdRequestResult.fromMessage(adRequestResult),
+    result,
+  );
+
+  @override
+  void onAdPlaybackStarted(final AudioAd audioAd) =>
+      _listener?.onAdPlaybackStarted(audioAd);
+
+  @override
+  void onAdPlaybackCompleted(
+    final android_messages.AdPlaybackResult adPlaybackResult,
+  ) => _listener?.onAdPlaybackCompleted(
+    AdPlaybackResult.fromMessage(adPlaybackResult),
+  );
+
+  @override
+  void onAdAvailabilityRetrieved(
+    final android_messages.AdAvailability result,
+  ) => audiomob._completeAvailability(AdAvailability.fromMessage(result));
+
+  @override
+  void onAdPlaybackPaused(final android_messages.AdPauseReason adPauseReason) =>
+      _listener?.onAdPlaybackPaused(AdPauseReason.fromMessage(adPauseReason));
+
+  @override
+  void onAdPlaybackResumed() => _listener?.onAdPlaybackResumed();
 }
