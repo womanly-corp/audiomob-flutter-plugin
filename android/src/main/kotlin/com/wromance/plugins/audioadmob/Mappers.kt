@@ -1,4 +1,4 @@
-package com.wromance.audiomob
+package com.wromance.plugins.audioadmob
 
 import com.audiomob.sdk.data.responses.AdAvailability
 import com.audiomob.sdk.data.responses.AudioAd

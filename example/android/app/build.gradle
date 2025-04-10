@@ -8,13 +8,21 @@ plugins {
 android {
     namespace = "com.wromance.audiomob_example"
     compileSdk = 35
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    sourceSets {
+        main.java.srcDirs += "src/main/kotlin"
+        test.java.srcDirs += "src/test/kotlin"
+        // for testig purposes enable this line and add android/libs/AudiomobSDK_v3.0.0.aar to the app/libs folder
+         main.jniLibs.srcDirs = ['libs']
+    }
+
+    
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17
     }
@@ -43,6 +51,20 @@ android {
             minifyEnabled false // disabled minification for debug build
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+
+    //repositories {
+    //    google()
+    //    mavenCentral()
+    //    mavenLocal()
+    //    flatDir {
+    //        dirs 'libs'
+    //    }
+    //}
+
+
+    dependencies {
+        compileOnly files('libs/AudiomobSDK_v3.0.0.aar')
     }
 }
 

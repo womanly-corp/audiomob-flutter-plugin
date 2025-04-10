@@ -1,4 +1,4 @@
-import 'package:audiomob/audiomob.dart';
+import 'package:audioadmob/audioadmob.dart';
 import 'package:flutter/material.dart';
 
 void main() {

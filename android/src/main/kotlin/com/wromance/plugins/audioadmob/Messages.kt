@@ -5,7 +5,7 @@
 // See also: https://pub.dev/packages/pigeon
 @file:Suppress("UNCHECKED_CAST", "ArrayInDataClass")
 
-package com.wromance.audiomob
+package com.wromance.plugins.audioadmob
 
 import android.util.Log
 import io.flutter.plugin.common.BasicMessageChannel
@@ -343,7 +343,7 @@ class AudiomobObserverApi(private val binaryMessenger: BinaryMessenger, private 
   fun onAdRequestStarted(callback: (Result<Unit>) -> Unit)
 {
     val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName = "dev.flutter.pigeon.audiomob.AudiomobObserverApi.onAdRequestStarted$separatedMessageChannelSuffix"
+    val channelName = "dev.flutter.pigeon.audioadmob.AudiomobObserverApi.onAdRequestStarted$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(null) {
       if (it is List<*>) {
@@ -361,7 +361,7 @@ class AudiomobObserverApi(private val binaryMessenger: BinaryMessenger, private 
   fun onAdRequestCompleted(adRequestResultArg: AdRequestResult, resultArg: AudioAd?, callback: (Result<Unit>) -> Unit)
 {
     val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName = "dev.flutter.pigeon.audiomob.AudiomobObserverApi.onAdRequestCompleted$separatedMessageChannelSuffix"
+    val channelName = "dev.flutter.pigeon.audioadmob.AudiomobObserverApi.onAdRequestCompleted$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(adRequestResultArg, resultArg)) {
       if (it is List<*>) {
@@ -379,7 +379,7 @@ class AudiomobObserverApi(private val binaryMessenger: BinaryMessenger, private 
   fun onAdPlaybackStarted(resultArg: AudioAd, callback: (Result<Unit>) -> Unit)
 {
     val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName = "dev.flutter.pigeon.audiomob.AudiomobObserverApi.onAdPlaybackStarted$separatedMessageChannelSuffix"
+    val channelName = "dev.flutter.pigeon.audioadmob.AudiomobObserverApi.onAdPlaybackStarted$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(resultArg)) {
       if (it is List<*>) {
@@ -397,7 +397,7 @@ class AudiomobObserverApi(private val binaryMessenger: BinaryMessenger, private 
   fun onAdPlaybackCompleted(adPlaybackResultArg: AdPlaybackResult, callback: (Result<Unit>) -> Unit)
 {
     val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName = "dev.flutter.pigeon.audiomob.AudiomobObserverApi.onAdPlaybackCompleted$separatedMessageChannelSuffix"
+    val channelName = "dev.flutter.pigeon.audioadmob.AudiomobObserverApi.onAdPlaybackCompleted$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(adPlaybackResultArg)) {
       if (it is List<*>) {
@@ -415,7 +415,7 @@ class AudiomobObserverApi(private val binaryMessenger: BinaryMessenger, private 
   fun onAdPlaybackPaused(adPauseReasonArg: AdPauseReason, callback: (Result<Unit>) -> Unit)
 {
     val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName = "dev.flutter.pigeon.audiomob.AudiomobObserverApi.onAdPlaybackPaused$separatedMessageChannelSuffix"
+    val channelName = "dev.flutter.pigeon.audioadmob.AudiomobObserverApi.onAdPlaybackPaused$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(adPauseReasonArg)) {
       if (it is List<*>) {
@@ -433,7 +433,7 @@ class AudiomobObserverApi(private val binaryMessenger: BinaryMessenger, private 
   fun onAdPlaybackResumed(callback: (Result<Unit>) -> Unit)
 {
     val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName = "dev.flutter.pigeon.audiomob.AudiomobObserverApi.onAdPlaybackResumed$separatedMessageChannelSuffix"
+    val channelName = "dev.flutter.pigeon.audioadmob.AudiomobObserverApi.onAdPlaybackResumed$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(null) {
       if (it is List<*>) {
@@ -451,7 +451,7 @@ class AudiomobObserverApi(private val binaryMessenger: BinaryMessenger, private 
   fun onAdAvailabilityRetrieved(resultArg: AdAvailability, callback: (Result<Unit>) -> Unit)
 {
     val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName = "dev.flutter.pigeon.audiomob.AudiomobObserverApi.onAdAvailabilityRetrieved$separatedMessageChannelSuffix"
+    val channelName = "dev.flutter.pigeon.audioadmob.AudiomobObserverApi.onAdAvailabilityRetrieved$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(resultArg)) {
       if (it is List<*>) {
@@ -521,7 +521,7 @@ interface AudiomobHostApi {
     fun setUp(binaryMessenger: BinaryMessenger, api: AudiomobHostApi?, messageChannelSuffix: String = "") {
       val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audiomob.AudiomobHostApi.initialize$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audioadmob.AudiomobHostApi.initialize$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -541,7 +541,7 @@ interface AudiomobHostApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audiomob.AudiomobHostApi.requestAndPlayAd$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audioadmob.AudiomobHostApi.requestAndPlayAd$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
@@ -557,7 +557,7 @@ interface AudiomobHostApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audiomob.AudiomobHostApi.pauseLifeCycle$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audioadmob.AudiomobHostApi.pauseLifeCycle$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
@@ -573,7 +573,7 @@ interface AudiomobHostApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audiomob.AudiomobHostApi.resumeLifeCycle$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audioadmob.AudiomobHostApi.resumeLifeCycle$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
@@ -589,7 +589,7 @@ interface AudiomobHostApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audiomob.AudiomobHostApi.release$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audioadmob.AudiomobHostApi.release$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
@@ -605,7 +605,7 @@ interface AudiomobHostApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audiomob.AudiomobHostApi.getAdAvailability$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audioadmob.AudiomobHostApi.getAdAvailability$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -623,7 +623,7 @@ interface AudiomobHostApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audiomob.AudiomobHostApi.pauseAd$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audioadmob.AudiomobHostApi.pauseAd$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
@@ -639,7 +639,7 @@ interface AudiomobHostApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audiomob.AudiomobHostApi.resumePausedAd$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audioadmob.AudiomobHostApi.resumePausedAd$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
@@ -655,7 +655,7 @@ interface AudiomobHostApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audiomob.AudiomobHostApi.stopAd$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audioadmob.AudiomobHostApi.stopAd$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
@@ -671,7 +671,7 @@ interface AudiomobHostApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audiomob.AudiomobHostApi.hasAdBegunPlaying$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audioadmob.AudiomobHostApi.hasAdBegunPlaying$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
@@ -686,7 +686,7 @@ interface AudiomobHostApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audiomob.AudiomobHostApi.isAdPaused$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audioadmob.AudiomobHostApi.isAdPaused$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
@@ -701,7 +701,7 @@ interface AudiomobHostApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audiomob.AudiomobHostApi.getTimeRemaining$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audioadmob.AudiomobHostApi.getTimeRemaining$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
@@ -716,7 +716,7 @@ interface AudiomobHostApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audiomob.AudiomobHostApi.setForceTestAds$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audioadmob.AudiomobHostApi.setForceTestAds$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -734,7 +734,7 @@ interface AudiomobHostApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audiomob.AudiomobHostApi.setSendGeoLocation$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audioadmob.AudiomobHostApi.setSendGeoLocation$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -752,7 +752,7 @@ interface AudiomobHostApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audiomob.AudiomobHostApi.setSendAdvertisingId$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audioadmob.AudiomobHostApi.setSendAdvertisingId$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -770,7 +770,7 @@ interface AudiomobHostApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audiomob.AudiomobHostApi.setSendAndroidIdAsAFallback$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audioadmob.AudiomobHostApi.setSendAndroidIdAsAFallback$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -788,7 +788,7 @@ interface AudiomobHostApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audiomob.AudiomobHostApi.setDoNotSendAnyDeviceIdsForNonConsentedUsers$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audioadmob.AudiomobHostApi.setDoNotSendAnyDeviceIdsForNonConsentedUsers$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -806,7 +806,7 @@ interface AudiomobHostApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audiomob.AudiomobHostApi.setSendConsentStrings$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audioadmob.AudiomobHostApi.setSendConsentStrings$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -824,7 +824,7 @@ interface AudiomobHostApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audiomob.AudiomobHostApi.setOnlySendContextualSignals$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.audioadmob.AudiomobHostApi.setOnlySendContextualSignals$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>

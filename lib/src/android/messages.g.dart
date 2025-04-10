@@ -305,7 +305,7 @@ abstract class AudiomobObserverApi {
     messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
     {
       final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.audiomob.AudiomobObserverApi.onAdRequestStarted$messageChannelSuffix', pigeonChannelCodec,
+          'dev.flutter.pigeon.audioadmob.AudiomobObserverApi.onAdRequestStarted$messageChannelSuffix', pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
@@ -324,18 +324,18 @@ abstract class AudiomobObserverApi {
     }
     {
       final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.audiomob.AudiomobObserverApi.onAdRequestCompleted$messageChannelSuffix', pigeonChannelCodec,
+          'dev.flutter.pigeon.audioadmob.AudiomobObserverApi.onAdRequestCompleted$messageChannelSuffix', pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
           assert(message != null,
-          'Argument for dev.flutter.pigeon.audiomob.AudiomobObserverApi.onAdRequestCompleted was null.');
+          'Argument for dev.flutter.pigeon.audioadmob.AudiomobObserverApi.onAdRequestCompleted was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final AdRequestResult? arg_adRequestResult = (args[0] as AdRequestResult?);
           assert(arg_adRequestResult != null,
-              'Argument for dev.flutter.pigeon.audiomob.AudiomobObserverApi.onAdRequestCompleted was null, expected non-null AdRequestResult.');
+              'Argument for dev.flutter.pigeon.audioadmob.AudiomobObserverApi.onAdRequestCompleted was null, expected non-null AdRequestResult.');
           final AudioAd? arg_result = (args[1] as AudioAd?);
           try {
             api.onAdRequestCompleted(arg_adRequestResult!, arg_result);
@@ -350,18 +350,18 @@ abstract class AudiomobObserverApi {
     }
     {
       final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.audiomob.AudiomobObserverApi.onAdPlaybackStarted$messageChannelSuffix', pigeonChannelCodec,
+          'dev.flutter.pigeon.audioadmob.AudiomobObserverApi.onAdPlaybackStarted$messageChannelSuffix', pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
           assert(message != null,
-          'Argument for dev.flutter.pigeon.audiomob.AudiomobObserverApi.onAdPlaybackStarted was null.');
+          'Argument for dev.flutter.pigeon.audioadmob.AudiomobObserverApi.onAdPlaybackStarted was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final AudioAd? arg_result = (args[0] as AudioAd?);
           assert(arg_result != null,
-              'Argument for dev.flutter.pigeon.audiomob.AudiomobObserverApi.onAdPlaybackStarted was null, expected non-null AudioAd.');
+              'Argument for dev.flutter.pigeon.audioadmob.AudiomobObserverApi.onAdPlaybackStarted was null, expected non-null AudioAd.');
           try {
             api.onAdPlaybackStarted(arg_result!);
             return wrapResponse(empty: true);
@@ -375,18 +375,18 @@ abstract class AudiomobObserverApi {
     }
     {
       final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.audiomob.AudiomobObserverApi.onAdPlaybackCompleted$messageChannelSuffix', pigeonChannelCodec,
+          'dev.flutter.pigeon.audioadmob.AudiomobObserverApi.onAdPlaybackCompleted$messageChannelSuffix', pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
           assert(message != null,
-          'Argument for dev.flutter.pigeon.audiomob.AudiomobObserverApi.onAdPlaybackCompleted was null.');
+          'Argument for dev.flutter.pigeon.audioadmob.AudiomobObserverApi.onAdPlaybackCompleted was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final AdPlaybackResult? arg_adPlaybackResult = (args[0] as AdPlaybackResult?);
           assert(arg_adPlaybackResult != null,
-              'Argument for dev.flutter.pigeon.audiomob.AudiomobObserverApi.onAdPlaybackCompleted was null, expected non-null AdPlaybackResult.');
+              'Argument for dev.flutter.pigeon.audioadmob.AudiomobObserverApi.onAdPlaybackCompleted was null, expected non-null AdPlaybackResult.');
           try {
             api.onAdPlaybackCompleted(arg_adPlaybackResult!);
             return wrapResponse(empty: true);
@@ -400,18 +400,18 @@ abstract class AudiomobObserverApi {
     }
     {
       final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.audiomob.AudiomobObserverApi.onAdPlaybackPaused$messageChannelSuffix', pigeonChannelCodec,
+          'dev.flutter.pigeon.audioadmob.AudiomobObserverApi.onAdPlaybackPaused$messageChannelSuffix', pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
           assert(message != null,
-          'Argument for dev.flutter.pigeon.audiomob.AudiomobObserverApi.onAdPlaybackPaused was null.');
+          'Argument for dev.flutter.pigeon.audioadmob.AudiomobObserverApi.onAdPlaybackPaused was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final AdPauseReason? arg_adPauseReason = (args[0] as AdPauseReason?);
           assert(arg_adPauseReason != null,
-              'Argument for dev.flutter.pigeon.audiomob.AudiomobObserverApi.onAdPlaybackPaused was null, expected non-null AdPauseReason.');
+              'Argument for dev.flutter.pigeon.audioadmob.AudiomobObserverApi.onAdPlaybackPaused was null, expected non-null AdPauseReason.');
           try {
             api.onAdPlaybackPaused(arg_adPauseReason!);
             return wrapResponse(empty: true);
@@ -425,7 +425,7 @@ abstract class AudiomobObserverApi {
     }
     {
       final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.audiomob.AudiomobObserverApi.onAdPlaybackResumed$messageChannelSuffix', pigeonChannelCodec,
+          'dev.flutter.pigeon.audioadmob.AudiomobObserverApi.onAdPlaybackResumed$messageChannelSuffix', pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
@@ -444,18 +444,18 @@ abstract class AudiomobObserverApi {
     }
     {
       final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.audiomob.AudiomobObserverApi.onAdAvailabilityRetrieved$messageChannelSuffix', pigeonChannelCodec,
+          'dev.flutter.pigeon.audioadmob.AudiomobObserverApi.onAdAvailabilityRetrieved$messageChannelSuffix', pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
           assert(message != null,
-          'Argument for dev.flutter.pigeon.audiomob.AudiomobObserverApi.onAdAvailabilityRetrieved was null.');
+          'Argument for dev.flutter.pigeon.audioadmob.AudiomobObserverApi.onAdAvailabilityRetrieved was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final AdAvailability? arg_result = (args[0] as AdAvailability?);
           assert(arg_result != null,
-              'Argument for dev.flutter.pigeon.audiomob.AudiomobObserverApi.onAdAvailabilityRetrieved was null, expected non-null AdAvailability.');
+              'Argument for dev.flutter.pigeon.audioadmob.AudiomobObserverApi.onAdAvailabilityRetrieved was null, expected non-null AdAvailability.');
           try {
             api.onAdAvailabilityRetrieved(arg_result!);
             return wrapResponse(empty: true);
@@ -486,7 +486,7 @@ class AudiomobHostApi {
 
   /// Initializes the Audiomob Android SDK
   Future<void> initialize(String apiKey, String bundleId, bool backgroundModeEnabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.audiomob.AudiomobHostApi.initialize$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.audioadmob.AudiomobHostApi.initialize$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -510,7 +510,7 @@ class AudiomobHostApi {
 
   /// Requests a background audio ad and begins the ad playback as soon as it's ready
   Future<void> requestAndPlayAd() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.audiomob.AudiomobHostApi.requestAndPlayAd$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.audioadmob.AudiomobHostApi.requestAndPlayAd$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -534,7 +534,7 @@ class AudiomobHostApi {
 
   /// Pauses the SDK's lifecycle, call this method when the app goes into the background (non-background ads only)
   Future<void> pauseLifeCycle() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.audiomob.AudiomobHostApi.pauseLifeCycle$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.audioadmob.AudiomobHostApi.pauseLifeCycle$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -558,7 +558,7 @@ class AudiomobHostApi {
 
   /// Resumes the SDK's lifecycle, call this method when the app comes into the foreground (non-background ads only)
   Future<void> resumeLifeCycle() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.audiomob.AudiomobHostApi.resumeLifeCycle$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.audioadmob.AudiomobHostApi.resumeLifeCycle$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -582,7 +582,7 @@ class AudiomobHostApi {
 
   /// Releases resources used by Audiomob, ensure to call this function when the context is destroyed
   Future<void> release() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.audiomob.AudiomobHostApi.release$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.audioadmob.AudiomobHostApi.release$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -606,7 +606,7 @@ class AudiomobHostApi {
 
   /// Starts the asynchronous call to get the AdAvailability information
   Future<void> getAdAvailability(Placement placement) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.audiomob.AudiomobHostApi.getAdAvailability$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.audioadmob.AudiomobHostApi.getAdAvailability$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -630,7 +630,7 @@ class AudiomobHostApi {
 
   /// Pauses the playing audio ad
   Future<void> pauseAd() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.audiomob.AudiomobHostApi.pauseAd$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.audioadmob.AudiomobHostApi.pauseAd$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -654,7 +654,7 @@ class AudiomobHostApi {
 
   /// Resumes the paused audio ad
   Future<void> resumePausedAd() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.audiomob.AudiomobHostApi.resumePausedAd$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.audioadmob.AudiomobHostApi.resumePausedAd$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -678,7 +678,7 @@ class AudiomobHostApi {
 
   /// Stops the audio ad playback
   Future<void> stopAd() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.audiomob.AudiomobHostApi.stopAd$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.audioadmob.AudiomobHostApi.stopAd$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -702,7 +702,7 @@ class AudiomobHostApi {
 
   /// Returns true if the ad playback is in progress
   Future<bool> hasAdBegunPlaying() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.audiomob.AudiomobHostApi.hasAdBegunPlaying$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.audioadmob.AudiomobHostApi.hasAdBegunPlaying$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -731,7 +731,7 @@ class AudiomobHostApi {
 
   /// Return true if the ad is paused
   Future<bool> isAdPaused() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.audiomob.AudiomobHostApi.isAdPaused$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.audioadmob.AudiomobHostApi.isAdPaused$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -760,7 +760,7 @@ class AudiomobHostApi {
 
   /// Returns the seconds remaining for the ad that is currently playing
   Future<double> getTimeRemaining() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.audiomob.AudiomobHostApi.getTimeRemaining$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.audioadmob.AudiomobHostApi.getTimeRemaining$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -789,7 +789,7 @@ class AudiomobHostApi {
 
   /// If set as true, the server will return test ads even if live ads are enabled on the dashboard
   Future<void> setForceTestAds(bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.audiomob.AudiomobHostApi.setForceTestAds$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.audioadmob.AudiomobHostApi.setForceTestAds$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -813,7 +813,7 @@ class AudiomobHostApi {
 
   /// If set as true, and user has given the permission, SDK will fetch latitude and longitude and send in ad request
   Future<void> setSendGeoLocation(bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.audiomob.AudiomobHostApi.setSendGeoLocation$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.audioadmob.AudiomobHostApi.setSendGeoLocation$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -837,7 +837,7 @@ class AudiomobHostApi {
 
   /// Sets whether or not to send the user's Android Advertising Id with the ad request if it's available
   Future<void> setSendAdvertisingId(bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.audiomob.AudiomobHostApi.setSendAdvertisingId$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.audioadmob.AudiomobHostApi.setSendAdvertisingId$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -861,7 +861,7 @@ class AudiomobHostApi {
 
   /// Sets whether or not to send the Android ID as a fallback ID if the Android Advertising Id is not available
   Future<void> setSendAndroidIdAsAFallback(bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.audiomob.AudiomobHostApi.setSendAndroidIdAsAFallback$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.audioadmob.AudiomobHostApi.setSendAndroidIdAsAFallback$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -885,7 +885,7 @@ class AudiomobHostApi {
 
   /// Sets whether or not to not send any device ID in the ad request if the Android Advertising Id is not available
   Future<void> setDoNotSendAnyDeviceIdsForNonConsentedUsers(bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.audiomob.AudiomobHostApi.setDoNotSendAnyDeviceIdsForNonConsentedUsers$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.audioadmob.AudiomobHostApi.setDoNotSendAnyDeviceIdsForNonConsentedUsers$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -909,7 +909,7 @@ class AudiomobHostApi {
 
   /// Sets whether or not to send consent strings set by a Consent Management Platform or in SharedPreferences
   Future<void> setSendConsentStrings(bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.audiomob.AudiomobHostApi.setSendConsentStrings$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.audioadmob.AudiomobHostApi.setSendConsentStrings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -933,7 +933,7 @@ class AudiomobHostApi {
 
   /// Sets whether or not to only send contextual signals in the ad request
   Future<void> setOnlySendContextualSignals(bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.audiomob.AudiomobHostApi.setOnlySendContextualSignals$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.audioadmob.AudiomobHostApi.setOnlySendContextualSignals$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,

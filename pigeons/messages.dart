@@ -5,11 +5,13 @@ import 'package:pigeon/pigeon.dart';
 @ConfigurePigeon(
   PigeonOptions(
     dartOut: 'lib/src/android/messages.g.dart',
-    kotlinOut: 'android/src/main/kotlin/com/wromance/audiomob/Messages.kt',
-    kotlinOptions: KotlinOptions(package: 'com.wromance.audiomob'),
+    kotlinOut:
+        'android/src/main/kotlin/com/wromance/plugins/audioadmob/Messages.kt',
+    kotlinOptions: KotlinOptions(package: 'com.wromance.plugins.audioadmob'),
     copyrightHeader: 'pigeons/copyright.txt',
   ),
 )
+
 /// Results of an audio ad request
 enum AdRequestResult {
   /// The audio ad request completed as an audio ad is ready to play

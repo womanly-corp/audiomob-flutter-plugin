@@ -1,4 +1,4 @@
-package com.wromance.audiomob
+package com.wromance.plugins.audioadmob
 
 import android.util.Log
 import androidx.lifecycle.DefaultLifecycleObserver

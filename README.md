@@ -15,19 +15,26 @@ Audiomob is a Flutter plugin that enables audio ad monetization via [Audiomob](h
    ```
 2. Run `flutter pub get` to install the dependencies.
 
-3. Add new folder `libs` in the `android/src/` folder, so it will be `android/src/libs/`
+3. Add new folder `audiomob-plugin` to your android project:
+4. Add new file - `audiomob-plugin/build.gradle.kts`:
 
-4. Add your `audiomob.aar` file to the `libs` folder.
+```gradle.kts
+configurations.maybeCreate("default")
+artifacts.add("default", file("AudiomobSDK_v3.0.0.aar"))
 
-5. Add the following to the `android/build.gradle` file:
+
+//Change group to whatever you want. Here I'm using the package from the aar that I'm importing from
+group = "com.audiomobplugin"
+```
+
+5. Add the following to your `settings.gradle`, before `include ':app'`:
 
 ```gradle
-repositories {
-    flatDir {
-        dirs 'libs'
-    }
-}
+include ':audiomob-plugin'
+include ':app'
 ```
+
+6. Add your `AudiomobSDK_v3.0.0.aar` file to the `audiomob-plugin` folder.
 
 ## Usage
 

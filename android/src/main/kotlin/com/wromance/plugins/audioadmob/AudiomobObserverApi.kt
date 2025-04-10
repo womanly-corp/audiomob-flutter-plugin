@@ -1,4 +1,4 @@
-package com.wromance.audiomob
+package com.wromance.plugins.audioadmob
 
 import com.audiomob.sdk.data.responses.AdAvailability
 import com.audiomob.sdk.data.responses.AudioAd
@@ -7,11 +7,11 @@ import com.audiomob.sdk.enums.AdRequestResult
 import com.audiomob.sdk.enums.PauseAdEnum
 import com.audiomob.sdk.interfaces.managers.IAudiomobCallback
 import io.flutter.embedding.engine.plugins.FlutterPlugin
-import com.wromance.audiomob.AdAvailability as PluginAdAvailability
-import com.wromance.audiomob.AdPauseReason as PluginAdPauseReason
-import com.wromance.audiomob.AdPlaybackResult as PluginAdPlaybackResult
-import com.wromance.audiomob.AdRequestResult as PluginAdRequestResult
-import com.wromance.audiomob.AudioAd as PluginAudioAd
+import com.wromance.plugins.audioadmob.AdAvailability as PluginAdAvailability
+import com.wromance.plugins.audioadmob.AdPauseReason as PluginAdPauseReason
+import com.wromance.plugins.audioadmob.AdPlaybackResult as PluginAdPlaybackResult
+import com.wromance.plugins.audioadmob.AdRequestResult as PluginAdRequestResult
+import com.wromance.plugins.audioadmob.AudioAd as PluginAudioAd
 
 class AudiomobObserverApiImpl(binding: FlutterPlugin.FlutterPluginBinding) : IAudiomobCallback {
     private var observerApi: AudiomobObserverApi? = null
