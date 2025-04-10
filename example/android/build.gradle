@@ -2,9 +2,12 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        mavenLocal()
-        flatDir {
-            dirs 'libs'
+        maven {
+            url 'https://wromance-237520028262.d.codeartifact.us-east-1.amazonaws.com/maven/audiomob/'
+            credentials {
+                username "aws"
+                password project.findProperty('CODEARTIFACT_AUTH_TOKEN') ?: System.getenv('CODEARTIFACT_AUTH_TOKEN')
+            }
         }
     }
 }

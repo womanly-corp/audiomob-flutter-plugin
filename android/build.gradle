@@ -18,9 +18,13 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        flatDir {
-            dirs 'libs'
-        }
+        // maven {
+        //     url 'https://wromance-237520028262.d.codeartifact.us-east-1.amazonaws.com/maven/audiomob/'
+        //     credentials {
+        //         username "aws"
+        //         password project.findProperty('CODEARTIFACT_AUTH_TOKEN') ?: System.getenv('CODEARTIFACT_AUTH_TOKEN')
+        //     }
+        // }
     }
 }
 
@@ -69,7 +73,8 @@ android {
         testImplementation("org.mockito:mockito-core:5.0.0")
 
         // AudioMob SDK 
-        implementation(name: 'AudiomobSDK_v3.0.0', ext: 'aar')
+        // implementation(name: 'AudiomobSDK_v3.0.0', ext: 'aar')
+        implementation 'com.audiomob:sdk:3.0.0'
 
         // Glide
         implementation 'com.github.bumptech.glide:glide:4.15.1'
