@@ -1,25 +1,25 @@
-name: audiomob
-description: "A Flutter plugin for integrating AudioMob audio ads into your Flutter applications."
-version: 0.0.2
+name: audioadmob
+description: "A plugin for integrating AudioMob audio ads into your Flutter applications."
+version: 0.0.3
 homepage: https://github.com/womanly-corp/audiomob-flutter-plugin
 
 environment:
-  sdk: ^3.5.4
-  flutter: '>=3.3.0'
+  sdk: ^3.5.0
 
 dependencies:
   flutter:
     sdk: flutter
-  plugin_platform_interface: ^2.0.2
+  plugin_platform_interface: ^2.1.8
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^4.0.0
+  lints: ^5.1.1
+  pigeon: ^25.3.0
+  xsoulspace_lints: ^0.0.14
 
 flutter:
   plugin:
     platforms:
       android:
-        package: com.wromance.audiomob
+        package: com.wromance.plugins.audioadmob
         pluginClass: AudiomobFlutterPlugin
+        dartPluginClass: AndroidAudiomob

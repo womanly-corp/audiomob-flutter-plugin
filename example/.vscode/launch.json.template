@@ -14,13 +14,21 @@
             "name": "example (profile mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "flutterMode": "profile",
+            "args": [
+                "--dart-define=API_KEY=your_api_key",
+                "--dart-define=BUNDLE_ID=your_bundle_id"
+            ]
         },
         {
             "name": "example (release mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            "flutterMode": "release",
+            "args": [
+                "--dart-define=API_KEY=your_api_key",
+                "--dart-define=BUNDLE_ID=your_bundle_id"
+            ]
         }
     ]
 }

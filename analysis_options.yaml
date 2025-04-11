@@ -1,4 +1,7 @@
-include: package:flutter_lints/flutter.yaml
-
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
+include: package:xsoulspace_lints/public_library.yaml
+
+analyzer:
+  exclude:
+    - "**/*.g.dart"
