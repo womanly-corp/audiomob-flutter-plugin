@@ -37,11 +37,11 @@ First, make sure you have access to the AudioMob SDK. If you don't have access, 
    flutter pub get
    ```
 
-3. Configure Android project in your Flutter project (required to provide private AAR file):
+3. Setup Android plugin in your Flutter project to provide private AAR file:
 
-   a. Create new folder `audioadmob-plugin` in your Android project (use path `android`).
+   a. Create new folder `audiomob-plugin` in your Android project (use path `android`).
 
-   b. Add `audioadmob-plugin/build.gradle.kts` to the new `audioadmob-plugin` folder.
+   b. Add `audiomob-plugin/build.gradle.kts` to the new `audiomob-plugin` folder with the following content:
 
    ```gradle.kts
    configurations.maybeCreate("default")
@@ -52,14 +52,14 @@ First, make sure you have access to the AudioMob SDK. If you don't have access, 
 
    c. Add `AudiomobSDK_v3.0.0.aar` to the `audiomob-plugin` folder
 
-   d. Update your android root `settings.gradle`:
+   d. Add `include ':audiomob-plugin'` to your android root `settings.gradle`:
 
    ```gradle
-   include ':audioadmob-plugin'
+   include ':audiomob-plugin'
    include ':app'
    ```
 
-   e. Add required permissions to `AndroidManifest.xml`:
+4. Add required permissions to `AndroidManifest.xml`:
 
    ```xml
    <uses-permission android:name="android.permission.INTERNET"/>
@@ -94,6 +94,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
+- 🎧 [AudioMob website](https://audiomob.com/)
 - 🐛 [Issue Tracker](https://github.com/womanly-corp/audiomob-flutter-plugin/issues)
 - 📚 [Snapshot of API Documentation (2025-04-10)](api_docs.md)
 - 📝 [Changelog](CHANGELOG.md)
@@ -101,7 +102,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Acknowledgments
 
 - [AudioMob](https://audiomob.com/) for their excellent audio advertising SDK
--
+
+---
 
 <p align="center">
   <p align="center">
