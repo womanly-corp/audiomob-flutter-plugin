@@ -15,8 +15,9 @@ AudioMob Flutter is a wrapper API over native [AudioMob SDK](https://audiomob.co
 - 🎵 Seamless audio ad integration
 - 🔄 Background playback support (only)
 - ⚡ Simple API for ad management
-- 📱 Android platform support
 - 🎮 Perfect for games and apps
+
+Currently, only Android is supported. Skippable ads and ui banners are not supported yet.
 
 ## Installation
 
@@ -88,9 +89,56 @@ await Audiomob.instance.init(
 
 ## API Documentation
 
+### Core Methods
+
+| Method              | Description                                                                       | Throws                              |
+| ------------------- | --------------------------------------------------------------------------------- | ----------------------------------- |
+| `Audiomob.instance` | Singleton instance of Audiomob                                                    | -                                   |
+| `init`              | Initializes the Audiomob SDK with API key, bundle ID and background mode settings | `UnimplementedError` if not Android |
+| `setListener`       | Sets event listener for Audiomob events                                           | -                                   |
+| `dispose`           | Cleans up resources                                                               | -                                   |
+
+### Ad Management Methods
+
+| Method           | Description              | Throws                            |
+| ---------------- | ------------------------ | --------------------------------- |
+| `requestAndPlay` | Requests and plays an ad | `AudiomobNotInitializedException` |
+| `pause`          | Pauses current ad        | `AudiomobNotInitializedException` |
+| `resume`         | Resumes paused ad        | `AudiomobNotInitializedException` |
+| `stop`           | Stops current ad         | `AudiomobNotInitializedException` |
+
+### State Properties
+
+| Property            | Description                        |
+| ------------------- | ---------------------------------- |
+| `isInitialized`     | Whether SDK is initialized         |
+| `hasAdBegunPlaying` | Whether ad playback is in progress |
+| `isAdPaused`        | Whether ad is paused               |
+| `timeRemaining`     | Seconds remaining in current ad    |
+
+### Configuration Methods
+
+| Method                                         | Description                                        |
+| ---------------------------------------------- | -------------------------------------------------- |
+| `setForceTestAds`                              | Forces test ads even if live ads enabled           |
+| `setSendGeoLocation`                           | Controls sending user location                     |
+| `setSendAdvertisingId`                         | Controls sending Android Advertising ID            |
+| `setSendAndroidIdAsAFallback`                  | Controls using Android ID as fallback              |
+| `setDoNotSendAnyDeviceIdsForNonConsentedUsers` | Controls device ID sending for non-consented users |
+| `setSendConsentStrings`                        | Controls sending consent strings                   |
+| `setOnlySendContextualSignals`                 | Controls sending only contextual signals           |
+
+### Ad Availability
+
+| Method              | Description                                  | Throws                            |
+| ------------------- | -------------------------------------------- | --------------------------------- |
+| `getAdAvailability` | Checks ad availability for a given placement | `AudiomobNotInitializedException` |
+
+For more detailed documentation how API works, please refer to [Snapshot of API Documentation (2025-04-10)](api_docs.md) or [AudioMob SDK Documentation](https://audiomob.com).
+
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This package is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Support
 
