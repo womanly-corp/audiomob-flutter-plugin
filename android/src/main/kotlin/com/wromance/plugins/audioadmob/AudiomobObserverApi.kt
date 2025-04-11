@@ -13,19 +13,15 @@ import com.wromance.plugins.audioadmob.AdPlaybackResult as PluginAdPlaybackResul
 import com.wromance.plugins.audioadmob.AdRequestResult as PluginAdRequestResult
 import com.wromance.plugins.audioadmob.AudioAd as PluginAudioAd
 
-class AudiomobObserverApiImpl(binding: FlutterPlugin.FlutterPluginBinding) : IAudiomobCallback {
+class AudiomobObserverApiImpl(binding: FlutterPlugin.FlutterPluginBinding, private val plugin: AudiomobFlutterPlugin) : IAudiomobCallback {
     private var observerApi: AudiomobObserverApi? = null
 
     init {
         observerApi = AudiomobObserverApi(binding.binaryMessenger)
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     override fun onAdAvailabilityRetrieved(result: AdAvailability) {
-
-        // for some reason that event is exceptional: it is called from some not-main thread
-        // please fill issue for that case
-        GlobalScope.launch(Dispatchers.Main) {
+        plugin.launchOnMainThread {
             val pluginAdAvailability = PluginAdAvailability(
                 adsAvailable = result.adsAvailable == true,
                 estimatedRevenue = result.estimatedRevenue?.toDouble() ?: 0.0,

@@ -21,8 +21,12 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 class AudiomobFlutterPlugin : FlutterPlugin, ActivityAware,
@@ -31,10 +35,12 @@ class AudiomobFlutterPlugin : FlutterPlugin, ActivityAware,
     private lateinit var audiomobObserver: IAudiomobCallback
     private lateinit var audiomobHostApi: AudiomobHostApi
     private var lifecycle: Lifecycle? = null
+    // Create a CoroutineScope tied to the lifecycle
+    private var pluginScope: CoroutineScope? = null
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         audiomobPlugin = AudiomobPlugin(flutterPluginBinding.applicationContext)
-        audiomobObserver = AudiomobObserverApiImpl(flutterPluginBinding)
+        audiomobObserver = AudiomobObserverApiImpl(flutterPluginBinding, this)
         audiomobHostApi = AudiomobHostApiImplementation(audiomobPlugin)
         AudiomobHostApi.setUp(flutterPluginBinding.binaryMessenger, audiomobHostApi)
         audiomobPlugin.setCallbacks(audiomobObserver)
@@ -48,17 +54,21 @@ class AudiomobFlutterPlugin : FlutterPlugin, ActivityAware,
     //// ActivityAware implementation
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         lifecycle = (binding.lifecycle as HiddenLifecycleReference).lifecycle
+        lifecycle?.removeObserver(this)
         lifecycle?.addObserver(this)
+        pluginScope?.cancel()
+        pluginScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     }
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-        lifecycle = (binding.lifecycle as HiddenLifecycleReference).lifecycle
-        lifecycle?.addObserver(this)
+        onAttachedToActivity(binding)
     }
 
     override fun onDetachedFromActivity() {
         lifecycle?.removeObserver(this)
         lifecycle = null
+        pluginScope?.cancel()
+        pluginScope = null
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
@@ -78,25 +88,10 @@ class AudiomobFlutterPlugin : FlutterPlugin, ActivityAware,
         // TODO: move to dart side
         audiomobPlugin.resumeLifeCycle()
     }
+
+    fun launchOnMainThread(block: suspend CoroutineScope.() -> Unit) {
+        pluginScope?.launch(block = block) ?: run {
+            Log.e("AudiomobFlutterPlugin", "pluginScope is null. Cannot launch coroutine.")
+        }
+    }
 }
-
-
-//class AudiomobPluginListener : IAudiomobCallback {
-//    var eventSink: EventChannel.EventSink? = null
-//    var audioAd: AudioAd? = null
-//
-//    override fun onAdAvailabilityRetrieved(result: AdAvailability) {
-//        // for some reason that event is exceptional: it is called from some not-main thread
-//        // please fill issue for that case
-//        GlobalScope.launch(Dispatchers.Main) {
-//            eventSink?.success(
-//                mapOf(
-//                    "type" to "onAdAvailabilityRetrieved",
-//                    "result" to result.toMap()
-//                )
-//            )
-//        }
-//        Log.d("Audiomob", "Ads are available: " + result.toMap())
-//    }
-//
-//}
