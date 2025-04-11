@@ -6,6 +6,28 @@ import io.flutter.Log
 import com.audiomob.sdk.enums.Placement as SdkPlacement
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 
+/**
+ * Implementation of the Flutter-to-Native bridge for AudioMob SDK functionality.
+ * 
+ * This class serves as the native (Android) implementation of methods that can be called from Flutter.
+ * It wraps the AudioMob SDK's [AudiomobPlugin] and provides error handling and type conversion between
+ * Flutter and native types.
+ * 
+ * Key responsibilities:
+ * 1. Method Implementation: Implements all methods defined in the Pigeon-generated [AudiomobHostApi] interface
+ * 2. Error Handling: Wraps SDK calls in try-catch blocks and converts exceptions to Flutter-friendly errors
+ * 3. Type Safety: Handles type conversion between Flutter and native types (e.g., Double to Float)
+ * 4. SDK Management: Manages the lifecycle of the AudioMob SDK instance
+ * 
+ * Usage:
+ * ```kotlin
+ * val hostApi = AudiomobHostApiImplementation(audiomobPlugin)
+ * AudiomobHostApi.setUp(flutterPluginBinding.binaryMessenger, hostApi)
+ * ```
+ * 
+ * Note: All methods are called on the main thread by default (handled by Pigeon).
+ * Error handling follows Flutter's error pattern using [FlutterError] for structured error reporting.
+ */
 class AudiomobHostApiImplementation(
     private val audiomobPlugin: AudiomobPlugin
 ) : AudiomobHostApi {
