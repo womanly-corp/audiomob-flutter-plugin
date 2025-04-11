@@ -2,6 +2,7 @@ package com.wromance.plugins.audioadmob
 
 import android.content.Context
 import com.audiomob.sdk.AudiomobPlugin
+import io.flutter.Log
 import com.audiomob.sdk.enums.Placement as SdkPlacement
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 
@@ -16,7 +17,7 @@ class AudiomobHostApiImplementation(
         try {
             audiomobPlugin.initialise(apiKey, bundleId, backgroundModeEnabled)
         } catch (e: Exception) {
-            throw FlutterError("initialization_error", "Failed to initialize AudioMob: ${e.message}", e.cause)
+            throw FlutterError("initialization_error", "Failed to initialize AudioMob: ${e.message}", Log.getStackTraceString(e.cause))
         }
     }
 
@@ -24,7 +25,7 @@ class AudiomobHostApiImplementation(
         try {
             audiomobPlugin.requestAndPlayAd()
         } catch (e: Exception) {
-            throw FlutterError("request_play_error", "Failed to request and play ad: ${e.message}", e.cause)
+            throw FlutterError("request_play_error", "Failed to request and play ad: ${e.message}", Log.getStackTraceString(e.cause))
         }
     }
 
@@ -32,7 +33,7 @@ class AudiomobHostApiImplementation(
         try {
             audiomobPlugin.pauseLifeCycle()
         } catch (e: Exception) {
-            throw FlutterError("pause_lifecycle_error", "Failed to pause lifecycle: ${e.message}", e.cause)
+            throw FlutterError("pause_lifecycle_error", "Failed to pause lifecycle: ${e.message}", Log.getStackTraceString(e.cause))
         }
     }
 
@@ -40,7 +41,7 @@ class AudiomobHostApiImplementation(
         try {
             audiomobPlugin.resumeLifeCycle()
         } catch (e: Exception) {
-            throw FlutterError("resume_lifecycle_error", "Failed to resume lifecycle: ${e.message}", e.cause)
+            throw FlutterError("resume_lifecycle_error", "Failed to resume lifecycle: ${e.message}", Log.getStackTraceString(e.cause))
         }
     }
 
@@ -48,7 +49,7 @@ class AudiomobHostApiImplementation(
         try {
             audiomobPlugin.release()
         } catch (e: Exception) {
-            throw FlutterError("release_error", "Failed to release resources: ${e.message}", e.cause)
+            throw FlutterError("release_error", "Failed to release resources: ${e.message}", Log.getStackTraceString(e.cause))
         }
     }
 
@@ -60,7 +61,7 @@ class AudiomobHostApiImplementation(
             }
             audiomobPlugin.getAdAvailability(sdkPlacement)
         } catch (e: Exception) {
-            throw FlutterError("ad_availability_error", "Failed to get ad availability: ${e.message}", e.cause)
+            throw FlutterError("ad_availability_error", "Failed to get ad availability: ${e.message}", Log.getStackTraceString(e.cause))
         }
     }
 
@@ -68,7 +69,7 @@ class AudiomobHostApiImplementation(
         try {
             audiomobPlugin.pauseAd()
         } catch (e: Exception) {
-            throw FlutterError("pause_ad_error", "Failed to pause ad: ${e.message}", e.cause)
+            throw FlutterError("pause_ad_error", "Failed to pause ad: ${e.message}", Log.getStackTraceString(e.cause))
         }
     }
 
@@ -76,7 +77,7 @@ class AudiomobHostApiImplementation(
         try {
             audiomobPlugin.resumePausedAd()
         } catch (e: Exception) {
-            throw FlutterError("resume_ad_error", "Failed to resume paused ad: ${e.message}", e.cause)
+            throw FlutterError("resume_ad_error", "Failed to resume paused ad: ${e.message}", Log.getStackTraceString(e.cause))
         }
     }
 
@@ -84,7 +85,7 @@ class AudiomobHostApiImplementation(
         try {
             audiomobPlugin.stopAd()
         } catch (e: Exception) {
-            throw FlutterError("stop_ad_error", "Failed to stop ad: ${e.message}", e.cause)
+            throw FlutterError("stop_ad_error", "Failed to stop ad: ${e.message}", Log.getStackTraceString(e.cause))
         }
     }
 
@@ -116,7 +117,7 @@ class AudiomobHostApiImplementation(
         try {
             audiomobPlugin.forceTestAds = enabled
         } catch (e: Exception) {
-            throw FlutterError("force_test_ads_error", "Failed to set force test ads: ${e.message}", e.cause)
+            throw FlutterError("force_test_ads_error", "Failed to set force test ads: ${e.message}", Log.getStackTraceString(e.cause))
         }
     }
 
@@ -124,7 +125,7 @@ class AudiomobHostApiImplementation(
         try {
             audiomobPlugin.sendGeoLocation = enabled
         } catch (e: Exception) {
-            throw FlutterError("geo_location_error", "Failed to set geo location: ${e.message}", e.cause)
+            throw FlutterError("geo_location_error", "Failed to set geo location: ${e.message}", Log.getStackTraceString(e.cause))
         }
     }
 
@@ -132,7 +133,7 @@ class AudiomobHostApiImplementation(
         try {
             audiomobPlugin.sendAdvertisingId = enabled
         } catch (e: Exception) {
-            throw FlutterError("advertising_id_error", "Failed to set advertising ID: ${e.message}", e.cause)
+            throw FlutterError("advertising_id_error", "Failed to set advertising ID: ${e.message}", Log.getStackTraceString(e.cause))
         }
     }
 
@@ -140,7 +141,7 @@ class AudiomobHostApiImplementation(
         try {
             audiomobPlugin.sendAndroidIdAsAFallback = enabled
         } catch (e: Exception) {
-            throw FlutterError("android_id_fallback_error", "Failed to set Android ID fallback: ${e.message}", e.cause)
+            throw FlutterError("android_id_fallback_error", "Failed to set Android ID fallback: ${e.message}", Log.getStackTraceString(e.cause))
         }
     }
 
@@ -148,7 +149,7 @@ class AudiomobHostApiImplementation(
         try {
             audiomobPlugin.doNotSendAnyDeviceIdsForNonConsentedUsers = enabled
         } catch (e: Exception) {
-            throw FlutterError("device_ids_consent_error", "Failed to set device IDs consent setting: ${e.message}", e.cause)
+            throw FlutterError("device_ids_consent_error", "Failed to set device IDs consent setting: ${e.message}", Log.getStackTraceString(e.cause))
         }
     }
 
@@ -156,7 +157,7 @@ class AudiomobHostApiImplementation(
         try {
             audiomobPlugin.sendConsentStrings = enabled
         } catch (e: Exception) {
-            throw FlutterError("consent_strings_error", "Failed to set consent strings: ${e.message}", e.cause)
+            throw FlutterError("consent_strings_error", "Failed to set consent strings: ${e.message}", Log.getStackTraceString(e.cause))
         }
     }
 
@@ -164,7 +165,7 @@ class AudiomobHostApiImplementation(
         try {
             audiomobPlugin.onlySendContextualSignals = enabled
         } catch (e: Exception) {
-            throw FlutterError("contextual_signals_error", "Failed to set contextual signals: ${e.message}", e.cause)
+            throw FlutterError("contextual_signals_error", "Failed to set contextual signals: ${e.message}", Log.getStackTraceString(e.cause))
         }
     }
 }
