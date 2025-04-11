@@ -13,13 +13,56 @@ import com.wromance.plugins.audioadmob.AdPlaybackResult as PluginAdPlaybackResul
 import com.wromance.plugins.audioadmob.AdRequestResult as PluginAdRequestResult
 import com.wromance.plugins.audioadmob.AudioAd as PluginAudioAd
 
+/**
+ * Native-to-Flutter bridge implementation for AudioMob SDK callbacks.
+ * 
+ * This class serves as the callback handler for the AudioMob SDK events and forwards them to Flutter.
+ * It implements [IAudiomobCallback] to receive SDK events and uses Pigeon-generated [AudiomobObserverApi]
+ * to communicate these events back to Flutter.
+ * 
+ * Key responsibilities:
+ * 1. Event Handling: Receives callbacks from AudioMob SDK about ad states and events
+ * 2. Thread Management: Ensures callbacks are properly dispatched to Flutter on the main thread
+ * 3. Type Conversion: Converts SDK types to Flutter-compatible types
+ * 4. Error Handling: Provides safe handling of null values and type conversions
+ * 
+ * Threading behavior:
+ * - Most SDK callbacks are received on the main thread
+ * - [onAdAvailabilityRetrieved] is an exception that comes from a background thread
+ * - Uses [AudiomobFlutterPlugin.launchOnMainThread] to ensure Flutter communication on main thread
+ * 
+ * Type mappings:
+ * - SDK [AdAvailability] → Plugin [PluginAdAvailability]
+ * - SDK [AudioAd] → Plugin [PluginAudioAd]
+ * - SDK [AdPlaybackResult] → Plugin [PluginAdPlaybackResult]
+ * - SDK [AdRequestResult] → Plugin [PluginAdRequestResult]
+ * - SDK [PauseAdEnum] → Plugin [PluginAdPauseReason]
+ * 
+ * Usage:
+ * ```kotlin
+ * val observer = AudiomobObserverApiImpl(flutterBinding, plugin)
+ * audiomobPlugin.setCallbacks(observer)
+ * ```
+ */
 class AudiomobObserverApiImpl(binding: FlutterPlugin.FlutterPluginBinding, private val plugin: AudiomobFlutterPlugin) : IAudiomobCallback {
     private var observerApi: AudiomobObserverApi? = null
 
+    /**
+     * Initializes the observer with a Flutter binary messenger.
+     * Creates the Pigeon-generated API instance for Flutter communication.
+     */
     init {
         observerApi = AudiomobObserverApi(binding.binaryMessenger)
     }
 
+    /**
+     * Handles ad availability information from the SDK.
+     * 
+     * Note: This callback is received on a background thread, unlike other callbacks.
+     * Uses [AudiomobFlutterPlugin.launchOnMainThread] to safely dispatch to Flutter.
+     * 
+     * @param result The ad availability information from the SDK
+     */
     override fun onAdAvailabilityRetrieved(result: AdAvailability) {
         plugin.launchOnMainThread {
             val pluginAdAvailability = PluginAdAvailability(
@@ -31,7 +74,7 @@ class AudiomobObserverApiImpl(binding: FlutterPlugin.FlutterPluginBinding, priva
             observerApi?.onAdAvailabilityRetrieved(pluginAdAvailability) { /* Handle callback result if needed */ }
         }
     }
-
+    
     override fun onAdPlaybackCompleted(adPlaybackResult: AdPlaybackResult) {
         val pluginResult = when (adPlaybackResult) {
             AdPlaybackResult.FINISHED -> PluginAdPlaybackResult.FINISHED
