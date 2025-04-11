@@ -89,6 +89,8 @@ await Audiomob.instance.init(
 
 ## API Documentation
 
+All methods can throw `PlatformException` if error occurs on native side.
+
 ### Core Methods
 
 | Method              | Description                                                                       | Throws                              |
@@ -100,39 +102,39 @@ await Audiomob.instance.init(
 
 ### Ad Management Methods
 
-| Method           | Description              | Throws                            |
-| ---------------- | ------------------------ | --------------------------------- |
-| `requestAndPlay` | Requests and plays an ad | `AudiomobNotInitializedException` |
-| `pause`          | Pauses current ad        | `AudiomobNotInitializedException` |
-| `resume`         | Resumes paused ad        | `AudiomobNotInitializedException` |
-| `stop`           | Stops current ad         | `AudiomobNotInitializedException` |
+| Method           | Description                                          | Throws                            |
+| ---------------- | ---------------------------------------------------- | --------------------------------- |
+| `requestAndPlay` | Requests and plays an ad through the Audiomob plugin | `AudiomobNotInitializedException` |
+| `pause`          | Pauses the currently playing ad                      | `AudiomobNotInitializedException` |
+| `resume`         | Resumes playback of a paused ad                      | `AudiomobNotInitializedException` |
+| `stop`           | Stop the currently playing ad                        | `AudiomobNotInitializedException` |
 
 ### State Properties
 
-| Property            | Description                        |
-| ------------------- | ---------------------------------- |
-| `isInitialized`     | Whether SDK is initialized         |
-| `hasAdBegunPlaying` | Whether ad playback is in progress |
-| `isAdPaused`        | Whether ad is paused               |
-| `timeRemaining`     | Seconds remaining in current ad    |
+| Property            | Description                                                        |
+| ------------------- | ------------------------------------------------------------------ |
+| `isInitialized`     | Whether the Audiomob instance is initialized                       |
+| `hasAdBegunPlaying` | Returns true if the ad playback is in progress                     |
+| `isAdPaused`        | Return true if the ad is paused                                    |
+| `timeRemaining`     | Returns the seconds remaining for the ad that is currently playing |
 
 ### Configuration Methods
 
-| Method                                         | Description                                        |
-| ---------------------------------------------- | -------------------------------------------------- |
-| `setForceTestAds`                              | Forces test ads even if live ads enabled           |
-| `setSendGeoLocation`                           | Controls sending user location                     |
-| `setSendAdvertisingId`                         | Controls sending Android Advertising ID            |
-| `setSendAndroidIdAsAFallback`                  | Controls using Android ID as fallback              |
-| `setDoNotSendAnyDeviceIdsForNonConsentedUsers` | Controls device ID sending for non-consented users |
-| `setSendConsentStrings`                        | Controls sending consent strings                   |
-| `setOnlySendContextualSignals`                 | Controls sending only contextual signals           |
+| Method                                         | Description                                                                                                    |
+| ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `setForceTestAds`                              | If set as true, the server will return test ads even if live ads are enabled on the dashboard                  |
+| `setSendGeoLocation`                           | Sets whether or not to send the user's location with the ad request                                            |
+| `setSendAdvertisingId`                         | Sets whether or not to send the user's Android Advertising Id with the ad request if it's available            |
+| `setSendAndroidIdAsAFallback`                  | Sets whether or not to send the Android ID as a fallback ID if the Android Advertising Id is not available     |
+| `setDoNotSendAnyDeviceIdsForNonConsentedUsers` | Sets whether or not to not send any device ID in the ad request if the Android Advertising Id is not available |
+| `setSendConsentStrings`                        | Sets whether or not to send consent strings set by a Consent Management Platform or in SharedPreferences       |
+| `setOnlySendContextualSignals`                 | Sets whether or not to only send contextual signals in the ad request                                          |
 
 ### Ad Availability
 
-| Method              | Description                                  | Throws                            |
-| ------------------- | -------------------------------------------- | --------------------------------- |
-| `getAdAvailability` | Checks ad availability for a given placement | `AudiomobNotInitializedException` |
+| Method              | Description                                                                                               | Throws                            |
+| ------------------- | --------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| `getAdAvailability` | Gets the ad availability for a given placement. For background mode ads, always pass [Placement.rewarded] | `AudiomobNotInitializedException` |
 
 For more detailed documentation how API works, please refer to [Snapshot of API Documentation (2025-04-10)](api_docs.md) or [AudioMob SDK Documentation](https://audiomob.com).
 
