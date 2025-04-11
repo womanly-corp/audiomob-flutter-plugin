@@ -35,7 +35,17 @@ class AudiomobFlutterPlugin : FlutterPlugin, ActivityAware,
     private lateinit var audiomobObserver: IAudiomobCallback
     private lateinit var audiomobHostApi: AudiomobHostApi
     private var lifecycle: Lifecycle? = null
-    // Create a CoroutineScope tied to the lifecycle
+
+    /**
+     * A coroutine scope tied to the Activity lifecycle for managing background-to-UI thread communication.
+     * 
+     * This scope is used to:
+     * 1. Safely dispatch callbacks from Audiomob SDK (background thread) to Flutter (main thread)
+     * 2. Automatically cancel ongoing coroutines when the Activity is destroyed
+     * 3. Prevent memory leaks by properly cleaning up when the plugin is detached
+     * 
+     * The scope is reassigned during Activity configuration changes to maintain proper lifecycle management.
+     */
     private var pluginScope: CoroutineScope? = null
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
