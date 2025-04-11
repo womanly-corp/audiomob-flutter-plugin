@@ -59,6 +59,7 @@ class Audiomob extends AndroidAudiomobBase with AudiomobAvailability {
   }
 }
 
+/// Extension methods for the Audiomob class with Android specific methods
 extension AudiomobAndroidProxyMethods on Audiomob {
   /// Requests and plays an ad through the Audiomob plugin.
   Future<void> requestAndPlay() {
@@ -74,6 +75,14 @@ extension AudiomobAndroidProxyMethods on Audiomob {
       throw const AudiomobNotInitializedException();
     }
     return _androidPlatform.pauseAd();
+  }
+
+  /// Stop the currently playing ad.
+  Future<void> stop() {
+    if (!isInitialized) {
+      throw const AudiomobNotInitializedException();
+    }
+    return _androidPlatform.stopAd();
   }
 
   /// Resumes playback of a paused ad.
@@ -112,7 +121,8 @@ extension AudiomobAndroidProxyMethods on Audiomob {
   /// Sets whether or not to not send any device ID in the ad request if the Android Advertising Id is not available
   Future<void> setDoNotSendAnyDeviceIdsForNonConsentedUsers(
     final bool enabled,
-  ) => _androidPlatform.setDoNotSendAnyDeviceIdsForNonConsentedUsers(enabled);
+  ) =>
+      _androidPlatform.setDoNotSendAnyDeviceIdsForNonConsentedUsers(enabled);
 
   /// Sets whether or not to send consent strings set by a Consent Management Platform or in SharedPreferences
   Future<void> setSendConsentStrings(final bool enabled) =>
@@ -123,6 +133,7 @@ extension AudiomobAndroidProxyMethods on Audiomob {
       _androidPlatform.setOnlySendContextualSignals(enabled);
 }
 
+/// Mixin for checking ad availability
 mixin AudiomobAvailability on AndroidAudiomobBase {
   Completer<AdAvailability>? _availabilityCompleter;
 
@@ -165,7 +176,8 @@ class _AudiomobAndroidObserver implements AudiomobObserverApi {
   void onAdRequestCompleted(
     final AdRequestResult adRequestResult,
     final AudioAd? result,
-  ) => _listener?.onAdRequestCompleted(adRequestResult, result);
+  ) =>
+      _listener?.onAdRequestCompleted(adRequestResult, result);
 
   @override
   void onAdPlaybackStarted(final AudioAd audioAd) =>
