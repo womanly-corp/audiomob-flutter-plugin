@@ -20,14 +20,20 @@ class AudiomobObserverApiImpl(binding: FlutterPlugin.FlutterPluginBinding) : IAu
         observerApi = AudiomobObserverApi(binding.binaryMessenger)
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onAdAvailabilityRetrieved(result: AdAvailability) {
-        val pluginAdAvailability = PluginAdAvailability(
-            adsAvailable = result.adsAvailable == true,
-            estimatedRevenue = result.estimatedRevenue?.toDouble() ?: 0.0,
-            estimatedCpm = result.estimatedCpm?.toDouble() ?: 0.0,
-            geo = result.geo ?: ""
-        )
-        observerApi?.onAdAvailabilityRetrieved(pluginAdAvailability) { /* Handle callback result if needed */ }
+
+        // for some reason that event is exceptional: it is called from some not-main thread
+        // please fill issue for that case
+        GlobalScope.launch(Dispatchers.Main) {
+            val pluginAdAvailability = PluginAdAvailability(
+                adsAvailable = result.adsAvailable == true,
+                estimatedRevenue = result.estimatedRevenue?.toDouble() ?: 0.0,
+                estimatedCpm = result.estimatedCpm?.toDouble() ?: 0.0,
+                geo = result.geo ?: ""
+            )
+            observerApi?.onAdAvailabilityRetrieved(pluginAdAvailability) { /* Handle callback result if needed */ }
+        }
     }
 
     override fun onAdPlaybackCompleted(adPlaybackResult: AdPlaybackResult) {
