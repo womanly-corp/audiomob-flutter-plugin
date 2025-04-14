@@ -44,7 +44,7 @@ First, make sure you have access to the AudioMob SDK. If you don't have access, 
 
    b. Add `audiomob-plugin/build.gradle.kts` to the new `audiomob-plugin` folder with the following content:
 
-   ```gradle.kts
+   ```kotlin
    configurations.maybeCreate("default")
    artifacts.add("default", file("AudiomobSDK_v3.0.0.aar"))
 
