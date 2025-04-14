@@ -159,7 +159,7 @@ class AudioAd {
     this.id = '',
     this.estimatedCpm = 0,
     this.estimatedRevenue = 0,
-    this.duration = 0,
+    this.durationInSeconds = 0,
   });
 
   /// The unique id of this audio ad
@@ -172,14 +172,14 @@ class AudioAd {
   double estimatedRevenue;
 
   /// The duration of the ad
-  double duration;
+  int durationInSeconds;
 
   List<Object?> _toList() {
     return <Object?>[
       id,
       estimatedCpm,
       estimatedRevenue,
-      duration,
+      durationInSeconds,
     ];
   }
 
@@ -192,7 +192,7 @@ class AudioAd {
       id: result[0]! as String,
       estimatedCpm: result[1]! as double,
       estimatedRevenue: result[2]! as double,
-      duration: result[3]! as double,
+      durationInSeconds: result[3]! as int,
     );
   }
 
