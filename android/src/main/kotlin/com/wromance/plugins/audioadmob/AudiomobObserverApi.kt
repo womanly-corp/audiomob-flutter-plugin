@@ -104,7 +104,7 @@ class AudiomobObserverApiImpl(binding: FlutterPlugin.FlutterPluginBinding, priva
             id = audioAd.id,
             estimatedCpm = audioAd.estimatedCpm.toDouble(),
             estimatedRevenue = audioAd.estimatedRevenue.toDouble(),
-            duration = audioAd.duration.toDouble()
+            durationInSeconds = audioAd.duration.toLong()
         )
         observerApi?.onAdPlaybackStarted(pluginAudioAd) { /* Handle callback result if needed */ }
     }
@@ -129,7 +129,7 @@ class AudiomobObserverApiImpl(binding: FlutterPlugin.FlutterPluginBinding, priva
                 id = it.id,
                 estimatedCpm = it.estimatedCpm.toDouble(),
                 estimatedRevenue = it.estimatedRevenue.toDouble(),
-                duration = it.duration.toDouble()
+                durationInSeconds = it.duration.toLong()
             )
         }
         

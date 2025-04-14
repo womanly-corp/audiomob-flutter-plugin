@@ -94,7 +94,7 @@ class AudioAd {
     this.id = '',
     this.estimatedCpm = 0,
     this.estimatedRevenue = 0,
-    this.duration = 0,
+    this.durationInSeconds = 0,
   });
 
   /// The unique id of this audio ad
@@ -107,7 +107,7 @@ class AudioAd {
   final double estimatedRevenue;
 
   /// The duration of the ad
-  final double duration;
+  final int durationInSeconds;
 }
 
 /// Flutter API Interface for Audiomob callbacks

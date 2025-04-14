@@ -38,12 +38,12 @@ class AudiomobFlutterPlugin : FlutterPlugin, ActivityAware,
 
     /**
      * A coroutine scope tied to the Activity lifecycle for managing background-to-UI thread communication.
-     * 
+     *
      * This scope is used to:
      * 1. Safely dispatch callbacks from Audiomob SDK (background thread) to Flutter (main thread)
      * 2. Automatically cancel ongoing coroutines when the Activity is destroyed
      * 3. Prevent memory leaks by properly cleaning up when the plugin is detached
-     * 
+     *
      * The scope is reassigned during Activity configuration changes to maintain proper lifecycle management.
      */
     private var pluginScope: CoroutineScope? = null
@@ -54,20 +54,27 @@ class AudiomobFlutterPlugin : FlutterPlugin, ActivityAware,
         audiomobHostApi = AudiomobHostApiImplementation(audiomobPlugin)
         AudiomobHostApi.setUp(flutterPluginBinding.binaryMessenger, audiomobHostApi)
         audiomobPlugin.setCallbacks(audiomobObserver)
+        initPluginScope()
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         audiomobPlugin.release()
         AudiomobHostApi.setUp(binding.binaryMessenger, null)
+        onDetachedFromActivity()
     }
 
     //// ActivityAware implementation
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-        lifecycle = (binding.lifecycle as HiddenLifecycleReference).lifecycle
         lifecycle?.removeObserver(this)
+        lifecycle = (binding.lifecycle as HiddenLifecycleReference).lifecycle
         lifecycle?.addObserver(this)
-        pluginScope?.cancel()
-        pluginScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+        initPluginScope()
+    }
+
+    private fun initPluginScope(){
+        if (pluginScope == null) {
+            pluginScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+        }
     }
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
@@ -82,8 +89,7 @@ class AudiomobFlutterPlugin : FlutterPlugin, ActivityAware,
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
-        lifecycle?.removeObserver(this)
-        lifecycle = null
+        onDetachedFromActivity()
     }
 
     //// Application lifecycle observer
@@ -102,6 +108,7 @@ class AudiomobFlutterPlugin : FlutterPlugin, ActivityAware,
     fun launchOnMainThread(block: suspend CoroutineScope.() -> Unit) {
         pluginScope?.launch(block = block) ?: run {
             Log.e("AudiomobFlutterPlugin", "pluginScope is null. Cannot launch coroutine.")
+            initPluginScope()
         }
     }
 }

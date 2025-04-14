@@ -220,7 +220,7 @@ data class AudioAd (
   /** Estimated revenue for an ad (if an impression is detected) */
   val estimatedRevenue: Double,
   /** The duration of the ad */
-  val duration: Double
+  val durationInSeconds: Long
 )
  {
   companion object {
@@ -228,8 +228,8 @@ data class AudioAd (
       val id = pigeonVar_list[0] as String
       val estimatedCpm = pigeonVar_list[1] as Double
       val estimatedRevenue = pigeonVar_list[2] as Double
-      val duration = pigeonVar_list[3] as Double
-      return AudioAd(id, estimatedCpm, estimatedRevenue, duration)
+      val durationInSeconds = pigeonVar_list[3] as Long
+      return AudioAd(id, estimatedCpm, estimatedRevenue, durationInSeconds)
     }
   }
   fun toList(): List<Any?> {
@@ -237,7 +237,7 @@ data class AudioAd (
       id,
       estimatedCpm,
       estimatedRevenue,
-      duration,
+      durationInSeconds,
     )
   }
   override fun equals(other: Any?): Boolean {
